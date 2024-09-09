@@ -17,7 +17,7 @@ int main(){
 
 
     }
-    printf("media final %.2f\n", m=m/a);
+    printf("\nmedia final %.2f\n", m=m/a);
     return 0;
 
 }
