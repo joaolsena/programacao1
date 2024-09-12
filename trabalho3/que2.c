@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
-
 void pira(int alt){
+	
 if (alt<2) {  // se ela for menor que 2 vai dar erro
 	perror("altura invalida");
 	exit(1);

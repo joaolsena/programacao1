@@ -18,7 +18,7 @@ int main(){
         printf("insira o lado do quadrado entre 1 e 30: ");
         scanf("%d", &h);
 
-        printf("insira o numero da opcao que deseja:\n1) triangulo preenchido.\n2) triangulo vazado.\n");
+        printf("insira o numero da opcao que deseja:\n1) preenchido.\n2) vazado.\n");
         scanf("%d", &p);
         
     } while (h<0|| h>30 || p!=1 && p!=2);

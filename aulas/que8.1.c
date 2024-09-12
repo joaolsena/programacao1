@@ -1,9 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 int main(){
-    int atual, a=0, b=1, n=0;
-    printf("insira a sequencia de fibanacci que voce quer: ");
+    int atual, n, a=0 , b=1, i=0;
     scanf("%d", &n);
-    for (int i =0; i < n; i++)
+    while (i<n)
     {
         if(i<=1)
         atual=i;
@@ -14,8 +14,7 @@ int main(){
         }
 
         printf("%d", atual);
-
+        i++;
     }
-    printf("\n");
-    
+    putchar('\n');
 }
