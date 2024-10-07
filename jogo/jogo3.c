@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_tela_X 50
+#define MAX_tela_X 30
 #define MAX_tela_y 20
 #define forma_jogador '^'
 #define forma_tiro '|'
 #define max_tiros 5
 #define monstro_1 'M'
+#define MAX_monstro 15
 
 // a para a esquerda. d para a direita. espaço para atirar. q para sair.
 
 int ponto=0;
 int jogador_x = MAX_tela_X/2;
 int jogador_y= MAX_tela_y-2;
-int monstro_x= MAX_tela_X/2;
-int monstro_y= MAX_tela_y/2; 
 char imagem [MAX_tela_y] [MAX_tela_X]= {0};
 typedef struct 
 {
@@ -23,6 +22,14 @@ typedef struct
 
 }tiros;
 tiros tiro[max_tiros]={{0,0,0}};
+typedef struct 
+{
+    int ativo;
+    int x;
+    int y;
+}bicho;
+bicho monstro [MAX_monstro]= {{0,0,0}};
+
 void limpar(){
         system("clear");
 
@@ -59,10 +66,31 @@ void tela(){
 void jogador (){
      imagem [jogador_y] [jogador_x]= forma_jogador; 
 }
-void monstros(){
-    imagem [monstro_y] [monstro_x]= monstro_1;
-
+void inicia_monstros(){
+    int rep= MAX_tela_X-2;
+    for (int i = 0; i < MAX_monstro; i++)
+    {
+        
+            monstro[i].ativo=1;
+            monstro[i].x= rep--;
+            monstro[i].y= MAX_tela_y/2;
+            imagem[monstro[i].y] [monstro[i].x] = monstro_1;
+       
+        
+    }
+    
 }
+
+void monstros(){
+   for (int i = 0; i < MAX_monstro; i++)
+   {
+    if (monstro[i].ativo)
+    {
+        imagem [monstro[i].y] [monstro[i].x]= monstro_1;
+    } 
+   }
+}
+
 void disparos(){
     for (int i = 0; i < max_tiros; i++)
     {
@@ -114,20 +142,25 @@ void mover_tiro() {
             tiro[i].ativo = 0;  
         }
 
-        // testando a funçao do mosntro e pontos depois vou fazer um for para isso
-        if (tiro[i].x==monstro_x && tiro[i].y==monstro_y)
+       for (int j = 0; j < MAX_monstro; j++)
+       {
+       if (monstro[j].ativo && tiro[i].x==monstro[j].x && tiro[i].y==monstro[j].y)
         {
             ponto+=10;
-             imagem [monstro_y] [monstro_x]= ' ';
+            monstro[j].ativo=0;
+             imagem [monstro[j].y] [monstro[j].x]= ' ';
         }     
-             // acaba aqui      
+               
+       }
+       
+          
     }
 }
 }
 
 int main(){
     jogador();
-    monstros();
+    inicia_monstros();
    
     
     while (1)
