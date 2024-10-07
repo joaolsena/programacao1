@@ -5,6 +5,7 @@
 #define forma_jogador '^'
 #define forma_tiro '.'
 #define max_tiros 5
+// a para a esquerda. d para a direita. espaço para atirar. q para sair.
 
 int jogador_x = MAX_tela_X/2;
 int jogador_y= MAX_tela_y-2;
