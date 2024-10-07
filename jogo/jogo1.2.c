@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_tela_X 80
-#define MAX_tela_y 60
+#define MAX_tela_X 30
+#define MAX_tela_y 20
 #define forma_jogador '^'
 #define forma_tiro '.'
 #define max_tiros 5
