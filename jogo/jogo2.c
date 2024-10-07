@@ -1,14 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_tela_X 30
+#define MAX_tela_X 50
 #define MAX_tela_y 20
 #define forma_jogador '^'
-#define forma_tiro '.'
+#define forma_tiro '|'
 #define max_tiros 5
+#define monstro_1 'M'
+
 // a para a esquerda. d para a direita. espaço para atirar. q para sair.
 
+int ponto=0;
 int jogador_x = MAX_tela_X/2;
 int jogador_y= MAX_tela_y-2;
+int monstro_x= MAX_tela_X/2;
+int monstro_y= MAX_tela_y/2; 
 char imagem [MAX_tela_y] [MAX_tela_X]= {0};
 typedef struct 
 {
@@ -24,6 +29,7 @@ void limpar(){
      }
 
 void tela(){
+     printf("pontos: %d", ponto);
     
     for (int i = 0; i < MAX_tela_y; i++)
     {
@@ -35,6 +41,9 @@ void tela(){
                 printf("_");
             } else if (imagem[i][j] == forma_jogador) {
                 printf("%c", forma_jogador);
+            } else if (imagem [i][j]== monstro_1)
+            {
+                printf("%c", monstro_1);
             } else if (imagem [i][j]== forma_tiro)
             {
                 printf("%c", forma_tiro);
@@ -49,6 +58,10 @@ void tela(){
 }
 void jogador (){
      imagem [jogador_y] [jogador_x]= forma_jogador; 
+}
+void monstros(){
+    imagem [monstro_y] [monstro_x]= monstro_1;
+
 }
 void disparos(){
     for (int i = 0; i < max_tiros; i++)
@@ -100,12 +113,21 @@ void mover_tiro() {
         } else {
             tiro[i].ativo = 0;  
         }
+
+        // testando a funçao do mosntro e pontos depois vou fazer um for para isso
+        if (tiro[i].x==monstro_x && tiro[i].y==monstro_y)
+        {
+            ponto+=10;
+             imagem [monstro_y] [monstro_x]= ' ';
+        }     
+             // acaba aqui      
     }
 }
 }
 
 int main(){
     jogador();
+    monstros();
    
     
     while (1)
