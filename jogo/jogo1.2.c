@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_tela_X 20
-#define MAX_tela_y 10
+#define MAX_tela_X 30
+#define MAX_tela_y 20
 #define forma_jogador '^'
 #define forma_tiro '.'
-#define max_tiros 1
+#define max_tiros 5
 
 int jogador_x = MAX_tela_X/2;
 int jogador_y= MAX_tela_y-2;
