@@ -29,9 +29,9 @@ void tela(){
         
         for (int j = 0; j < MAX_tela_X; j++)
         {
-            if (i== 0 || j==0 || i==MAX_tela_y-1 || j==MAX_tela_X-1)
+            if ( i==MAX_tela_y-1 )
             {
-                printf("+");
+                printf("_");
             } else if (imagem[i][j] == forma_jogador) {
                 printf("%c", forma_jogador);
             } else if (imagem [i][j]== forma_tiro)
