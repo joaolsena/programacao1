@@ -17,6 +17,8 @@
 
 int ponto=0;
 int vida=3;
+int direcao = 1; 
+int tempo_monstro=0;
 int posicao= MAX_tela_X/10; //posiciona cada monstro um do lado do outro se encontra no void inicia monstro
 char imagem [MAX_tela_y] [MAX_tela_X]= {0};
 
@@ -34,7 +36,6 @@ typedef struct
     int ativo;
     int x;
     int y;
-    int direcao;
 }bicho;
 bicho monstro [MAX_monstro]= {{0,0,0}};
 
@@ -98,7 +99,6 @@ void inicia_monstros(){
             monstro[i].ativo=1;
             monstro[i].x= posicao + (2*i);
             monstro[i].y= MAX_tela_y/2;
-            monstro[i].direcao=1;
             imagem[monstro[i].y] [monstro[i].x] = monstro_1; 
     } 
 }
@@ -112,25 +112,45 @@ void monstros(){
     } 
    }
 }
-void movimento_monstro(){
+   void movimento_monstro() {
+    tempo_monstro++;
+    if(tempo_monstro>=2){
+        
+        tempo_monstro=0;
     
-        for (int i = 0; i < MAX_monstro; i++)
-        {
-            if(monstro[i].ativo){
-                imagem [monstro[i].y] [monstro[i].x]= ' ';
-
-                    monstro[i].x++;
-                 if (monstro[i].x<=0 || monstro[i].x>= MAX_tela_X)
-                {
-                    monstro[i].x--;
-                }
-                
-                imagem [monstro[i].y] [monstro[i].x]= monstro_1;
+        for (int i = 0; i < MAX_monstro; i++) {
+            if (monstro[i].ativo) {
+                imagem[monstro[i].y][monstro[i].x] = ' '; 
+                monstro[i].x += direcao; 
             }
         }
         
+        for (int i = 0; i < MAX_monstro; i++) {
+            if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1)) {
+                direcao *= -1; 
+                for (int j = 0; j < MAX_monstro; j++) {
+                    if (monstro[j].ativo) {
+                        monstro[j].y += 1; 
+                        if (monstro[j].y >= MAX_tela_y - 3) {
+                            vida--; 
+                            if (vida == 0) {
+                                printf("\nGame Over!\n");
+                                exit(0);
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        for (int i = 0; i < MAX_monstro; i++) {
+            if (monstro[i].ativo) {
+                imagem[monstro[i].y][monstro[i].x] = monstro_1; // Atualiza a nova posição do monstro
+            }
+        }
     }
-    
+}
 
 
 void disparos(){
@@ -144,9 +164,8 @@ void disparos(){
         break;
         }
     }
-    
-
 }
+
 void mover(){
 
     imagem [jogador_p.y] [jogador_p.x]= ' ';
@@ -194,7 +213,6 @@ void mover_tiro() {
        }   
     }
 }
-
 
 int main(){
     jogador();
