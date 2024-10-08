@@ -20,6 +20,7 @@ int vida = 3;
 int direcao = 1;
 int tempo_monstro = 0;
 int velocidade = 1;
+int teste = 0;
 int posicao = MAX_tela_X / 10; // Posição inicial dos monstros
 char imagem[MAX_tela_y][MAX_tela_X] = {0};
 
@@ -29,6 +30,7 @@ typedef struct {
     int x;
     int y;
 } tiros;
+
 tiros tiro[max_tiros] = {{0, 0, 0}};
 
 typedef struct {
@@ -36,12 +38,22 @@ typedef struct {
     int x;
     int y;
 } bicho;
-bicho monstro[MAX_monstro * 3] = {{0, 0, 0}}; // Monstros superior e inferior
+
+bicho monstro[MAX_monstro * 2] = {{0, 0, 0}}; // Monstros superior e inferior
+
+typedef struct {
+    int ativo;
+    int x;
+    int y;
+} bicho2;
+
+bicho2 monstro2[MAX_monstro*2] = {{0, 0, 0}}; // Monstros adicionais
 
 typedef struct {
     int x;
     int y;
 } jogado;
+
 jogado jogador_p;
 
 // Função para limpar a tela
@@ -52,7 +64,7 @@ void limpar() {
 // Função para desenhar a tela
 void tela() {
     printf("%*sPontos: %d", MAX_margem + 15, " ", ponto);
-    printf("%*svida: %d\n", MAX_margem + 15, "", vida);
+    printf("%*sVida: %d\n", MAX_margem + 15, "", vida);
     
     for (int i = 0; i < MAX_tela_y; i++) {
         for (int k = 0; k < MAX_margem; k++) {
@@ -65,10 +77,9 @@ void tela() {
                 printf("%c", forma_jogador);
             } else if (imagem[i][j] == monstro_1) {
                 printf("%c", monstro_1);
-            } else if (imagem[i][j]== monstro_2)
-            {
+            } else if (imagem[i][j] == monstro_2) {
                 printf("%c", monstro_2);
-            }else if (imagem[i][j] == forma_tiro) {
+            } else if (imagem[i][j] == forma_tiro) {
                 printf("%c", forma_tiro);
             } else {
                 printf(" ");
@@ -87,27 +98,32 @@ void jogador() {
 
 // Função para inicializar monstros
 void inicia_monstros() {
-    // Inicializar monstros inferiores
     for (int i = 0; i < MAX_monstro; i++) {
+        // Monstros inferiores
         monstro[i].ativo = 1;
         monstro[i].x = posicao + (2 * i);
         monstro[i].y = MAX_tela_y / 2;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
-    }
-    // Inicializar monstros superiores
-    for (int i = MAX_monstro; i < MAX_monstro * 2; i++) {
-        monstro[i].ativo = 1;
-        monstro[i].x = posicao + (2 * (i - MAX_monstro));
-        monstro[i].y = (MAX_tela_y / 2) - 1;
-        imagem[monstro[i].y][monstro[i].x] = monstro_1;
-    }
-     for (int i = MAX_monstro*2; i < MAX_monstro * 3; i++) {
-        monstro[i].ativo = 1;
-        monstro[i].x = posicao + (2 * (i - MAX_monstro*2));
-        monstro[i].y = (MAX_tela_y / 2) - 2;
-        imagem[monstro[i].y][monstro[i].x] = monstro_2;
+
+        // Monstros superiores
+        monstro[i + MAX_monstro].ativo = 1;
+        monstro[i + MAX_monstro].x = posicao + (2 * i);
+        monstro[i + MAX_monstro].y = (MAX_tela_y / 2) - 1;
+        imagem[monstro[i + MAX_monstro].y][monstro[i + MAX_monstro].x] = monstro_1;
+
+        // Monstros adicionais
+        monstro2[i].ativo = 1;
+        monstro2[i].x = posicao + (2 * i);
+        monstro2[i].y = (MAX_tela_y / 2) - 2;
+
+        imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
+        monstro2[i].ativo = 1;
+        monstro2[i].x = posicao + (2 * i);
+        monstro2[i].y = (MAX_tela_y / 2) - 3;
+        imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
     }
 }
+
 // Função para disparar tiros
 void disparos() {
     for (int i = 0; i < max_tiros; i++) {
@@ -125,7 +141,7 @@ void disparos() {
 void mover() {
     imagem[jogador_p.y][jogador_p.x] = ' ';
     char move;
-    scanf("%c", &move);
+    scanf("%c", &move);  // Adiciona um espaço antes de %c para ignorar espaços em branco
 
     if (move == 'a' && jogador_p.x > 1) {
         jogador_p.x--;
@@ -153,13 +169,25 @@ void mover_tiro() {
                 tiro[i].ativo = 0;
             }
 
-            for (int j = 0; j < MAX_monstro * 3; j++) {
+            // Verifica colisão com monstros do tipo 1
+            for (int j = 0; j < MAX_monstro * 2; j++) {
                 if (monstro[j].ativo && tiro[i].x == monstro[j].x && tiro[i].y == monstro[j].y) {
-                    ponto += 10;
+                    ponto += 10; // Colisão com monstro 1
                     monstro[j].ativo = 0;
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break;
+                    break; // Para não verificar mais após a colisão
+                }
+            }
+
+            // Verifica colisão com monstros do tipo 2
+            for (int j = 0; j < MAX_monstro*2; j++) {
+                if (monstro2[j].ativo && tiro[i].x == monstro2[j].x && tiro[i].y == monstro2[j].y) {
+                    ponto += 20; // Ganha 20 pontos ao colidir com monstro 2
+                    monstro2[j].ativo = 0;
+                    imagem[monstro2[j].y][monstro2[j].x] = ' ';
+                    tiro[i].ativo = 0;
+                    break; // Para não verificar mais após a colisão
                 }
             }
         }
@@ -173,24 +201,39 @@ void movimento_monstro() {
         tempo_monstro = 0;
 
         // Remove monstros das posições atuais
-        for (int i = 0; i < MAX_monstro * 3; i++) {
+        for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo) {
                 imagem[monstro[i].y][monstro[i].x] = ' ';
             }
         }
+        
+        // Remove monstros adicionais das posições atuais
+        for (int i = 0; i < MAX_monstro*2; i++) {
+            if (monstro2[i].ativo) {
+                imagem[monstro2[i].y][monstro2[i].x] = ' ';
+            }
+        }
 
-        // Move os monstros para a nova posição
-        for (int i = 0; i < MAX_monstro * 3; i++) {
+        // Move os monstros do tipo 1 para a nova posição
+        for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo) {
                 monstro[i].x += direcao;
             }
         }
 
-        // Verifica colisão com borda e ajusta direcao
-        for (int i = 0; i < MAX_monstro * 3; i++) {
+        // Move os monstros do tipo 2 para a nova posição
+        for (int i = 0; i < MAX_monstro*2; i++) {
+            if (monstro2[i].ativo) {
+                monstro2[i].x += direcao;
+            }
+        }
+
+        // Verifica colisão com borda e ajusta direção
+        for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1)) {
                 direcao *= -1;
-                for (int j = 0; j < MAX_monstro * 3; j++) {
+
+                for (int j = 0; j < MAX_monstro * 2; j++) {
                     if (monstro[j].ativo) {
                         monstro[j].y += 1;
                         if (monstro[j].y >= MAX_tela_y - 3) {
@@ -202,16 +245,37 @@ void movimento_monstro() {
                         }
                     }
                 }
+
+                // Move os monstros do tipo 2 para baixo também
+                for (int j = 0; j < MAX_monstro*2; j++) {
+                    if (monstro2[j].ativo) {
+                        monstro2[j].y += 1;
+                        if (monstro2[j].y >= MAX_tela_y - 3) {
+                            vida--;
+                            if (vida == 0) {
+                                printf("\nGame Over!\n");
+                                exit(0);
+                            }
+                        }
+                    }
+                }
+
                 velocidade++;
                 break;
             }
         }
 
-        // Atualiza as novas posições dos monstros
-        for (int i = 0; i < MAX_monstro * 3; i++) {
+        // Atualiza as novas posições dos monstros do tipo 1
+        for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo) {
                 imagem[monstro[i].y][monstro[i].x] = monstro_1;
-                imagem[monstro[i].y][monstro[i].x] = monstro_2;
+            }
+        }
+
+        // Atualiza as novas posições dos monstros do tipo 2
+        for (int i = 0; i < MAX_monstro*2; i++) {
+            if (monstro2[i].ativo) {
+                imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
             }
         }
     }
