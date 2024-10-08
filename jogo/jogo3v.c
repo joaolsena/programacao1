@@ -16,7 +16,7 @@
 // a para a esquerda. d para a direita. espaço para atirar. q para sair.
 
 int ponto=0;
-int vida=0;
+int vida=3;
 int posicao= MAX_tela_X/10; //posiciona cada monstro um do lado do outro se encontra no void inicia monstro
 char imagem [MAX_tela_y] [MAX_tela_X]= {0};
 
@@ -110,27 +110,6 @@ void monstros(){
     } 
    }
 }
-void movimento_monstro(){
-    
-        for (int i = 0; i < MAX_monstro; i++)
-        {
-            if(monstro[i].ativo){
-                imagem [monstro[i].y] [monstro[i].x]= ' ';
-                if (monstro[i].x<MAX_tela_X/10)
-                {
-                    monstro[i].x++;
-                } else if (monstro[i].x<MAX_tela_X-1)
-                {
-                    monstro[i].x--;
-                }
-                
-                imagem [monstro[i].y] [monstro[i].x]= monstro_1;
-            }
-        }
-        
-    }
-    
-
 
 void disparos(){
     for (int i = 0; i < max_tiros; i++)
@@ -204,7 +183,6 @@ int main(){
         tela();
         mover();
         mover_tiro();
-        movimento_monstro();
     }
     return 0;
 }
