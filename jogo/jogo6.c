@@ -2,17 +2,17 @@
 #include <stdlib.h>
 
 // Configurações de tela
-#define MAX_tela_X 50
-#define MAX_tela_y 20
+#define MAX_tela_X 35
+#define MAX_tela_y 15
 #define MAX_margem 30
 
 // Configurações de jogo
 #define forma_jogador '^'
 #define forma_tiro '|'
-#define max_tiros 5
+#define max_tiros 15
 #define monstro_1 'M'
 #define monstro_2 'A'
-#define MAX_monstro 15 // Máximo de monstros por linha
+#define MAX_monstro 11 // Máximo de monstros por linha
 
 
 int ponto = 0;
@@ -20,7 +20,6 @@ int vida = 3;
 int direcao = 1;
 int tempo_monstro = 0;
 int velocidade = 1;
-int teste = 0;
 int posicao = MAX_tela_X / 10; // Posição inicial dos monstros
 char imagem[MAX_tela_y][MAX_tela_X] = {0};
 
@@ -114,12 +113,12 @@ void inicia_monstros() {
         monstro2[i].ativo = 1;
         monstro2[i].x = posicao + (2 * i);
         monstro2[i].y = (MAX_tela_y / 2) - 2;
+        imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
 
-        imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
-        monstro2[i].ativo = 1;
-        monstro2[i].x = posicao + (2 * i);
-        monstro2[i].y = (MAX_tela_y / 2) - 3;
-        imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
+        monstro2[i+MAX_monstro].ativo = 1;
+        monstro2[i+MAX_monstro].x = posicao + (2 * i);
+        monstro2[i+ MAX_monstro].y = (MAX_tela_y / 2) - 3;
+        imagem[monstro2[i + MAX_monstro].y][monstro2[i + MAX_monstro].x] = monstro_2;
     }
 }
 
@@ -196,7 +195,7 @@ void mover_tiro() {
 // Função para mover monstros e atualizar suas posições
 void movimento_monstro() {
     tempo_monstro++;
-    if (tempo_monstro >= (4 - velocidade)) {
+    if (tempo_monstro >= (5 - velocidade)) {
         tempo_monstro = 0;
 
         // Remove monstros das posições atuais
@@ -207,7 +206,7 @@ void movimento_monstro() {
         }
         
         
-        for (int i = 0; i < MAX_monstro*2; i++) {
+        for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro2[i].ativo) {
                 imagem[monstro2[i].y][monstro2[i].x] = ' ';
             }
@@ -245,7 +244,6 @@ void movimento_monstro() {
                     }
                 }
 
-                //
                 for (int j = 0; j < MAX_monstro*2; j++) {
                     if (monstro2[j].ativo) {
                         monstro2[j].y += 1;
