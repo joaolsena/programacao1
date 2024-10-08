@@ -110,6 +110,26 @@ void monstros(){
     } 
    }
 }
+void movimento_monstro(){
+    
+        for (int i = 0; i < MAX_monstro; i++)
+        {
+            if(monstro[i].ativo){
+                if (monstro[i].x<MAX_tela_X/10)
+                {
+                    monstro[i].x++;
+                } else if (monstro[i].x<MAX_tela_X-1)
+                {
+                    monstro[i].x--;
+                }
+                
+                imagem [monstro[i].y] [monstro[i].x]= monstro_1;
+            }
+        }
+        
+    }
+    
+
 
 void disparos(){
     for (int i = 0; i < max_tiros; i++)
@@ -183,6 +203,7 @@ int main(){
         tela();
         mover();
         mover_tiro();
+        movimento_monstro();
     }
     return 0;
 }
