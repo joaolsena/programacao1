@@ -14,7 +14,7 @@
 #define monstro_2 'A'
 #define MAX_monstro 15 // Máximo de monstros por linha
 
-// Variáveis globais
+
 int ponto = 0;
 int vida = 3;
 int direcao = 1;
@@ -99,19 +99,18 @@ void jogador() {
 // Função para inicializar monstros
 void inicia_monstros() {
     for (int i = 0; i < MAX_monstro; i++) {
-        // Monstros inferiores
+        
         monstro[i].ativo = 1;
         monstro[i].x = posicao + (2 * i);
         monstro[i].y = MAX_tela_y / 2;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
 
-        // Monstros superiores
         monstro[i + MAX_monstro].ativo = 1;
         monstro[i + MAX_monstro].x = posicao + (2 * i);
         monstro[i + MAX_monstro].y = (MAX_tela_y / 2) - 1;
         imagem[monstro[i + MAX_monstro].y][monstro[i + MAX_monstro].x] = monstro_1;
 
-        // Monstros adicionais
+        
         monstro2[i].ativo = 1;
         monstro2[i].x = posicao + (2 * i);
         monstro2[i].y = (MAX_tela_y / 2) - 2;
@@ -141,7 +140,7 @@ void disparos() {
 void mover() {
     imagem[jogador_p.y][jogador_p.x] = ' ';
     char move;
-    scanf("%c", &move);  // Adiciona um espaço antes de %c para ignorar espaços em branco
+    scanf("%c", &move);  
 
     if (move == 'a' && jogador_p.x > 1) {
         jogador_p.x--;
@@ -176,18 +175,18 @@ void mover_tiro() {
                     monstro[j].ativo = 0;
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; // Para não verificar mais após a colisão
+                    break; 
                 }
             }
 
             // Verifica colisão com monstros do tipo 2
             for (int j = 0; j < MAX_monstro*2; j++) {
                 if (monstro2[j].ativo && tiro[i].x == monstro2[j].x && tiro[i].y == monstro2[j].y) {
-                    ponto += 20; // Ganha 20 pontos ao colidir com monstro 2
+                    ponto += 20; 
                     monstro2[j].ativo = 0;
                     imagem[monstro2[j].y][monstro2[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; // Para não verificar mais após a colisão
+                    break; 
                 }
             }
         }
@@ -207,28 +206,28 @@ void movimento_monstro() {
             }
         }
         
-        // Remove monstros adicionais das posições atuais
+        
         for (int i = 0; i < MAX_monstro*2; i++) {
             if (monstro2[i].ativo) {
                 imagem[monstro2[i].y][monstro2[i].x] = ' ';
             }
         }
 
-        // Move os monstros do tipo 1 para a nova posição
+        
         for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo) {
                 monstro[i].x += direcao;
             }
         }
 
-        // Move os monstros do tipo 2 para a nova posição
+        
         for (int i = 0; i < MAX_monstro*2; i++) {
             if (monstro2[i].ativo) {
                 monstro2[i].x += direcao;
             }
         }
 
-        // Verifica colisão com borda e ajusta direção
+        
         for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1)) {
                 direcao *= -1;
@@ -246,7 +245,7 @@ void movimento_monstro() {
                     }
                 }
 
-                // Move os monstros do tipo 2 para baixo também
+                //
                 for (int j = 0; j < MAX_monstro*2; j++) {
                     if (monstro2[j].ativo) {
                         monstro2[j].y += 1;
@@ -272,7 +271,7 @@ void movimento_monstro() {
             }
         }
 
-        // Atualiza as novas posições dos monstros do tipo 2
+        
         for (int i = 0; i < MAX_monstro*2; i++) {
             if (monstro2[i].ativo) {
                 imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
