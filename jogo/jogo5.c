@@ -34,6 +34,7 @@ typedef struct
     int ativo;
     int x;
     int y;
+    int direcao;
 }bicho;
 bicho monstro [MAX_monstro]= {{0,0,0}};
 
@@ -97,6 +98,7 @@ void inicia_monstros(){
             monstro[i].ativo=1;
             monstro[i].x= posicao + (2*i);
             monstro[i].y= MAX_tela_y/2;
+            monstro[i].direcao=1;
             imagem[monstro[i].y] [monstro[i].x] = monstro_1; 
     } 
 }
@@ -116,12 +118,11 @@ void movimento_monstro(){
         {
             if(monstro[i].ativo){
                 imagem [monstro[i].y] [monstro[i].x]= ' ';
-                if (monstro[i].x<MAX_tela_X-1)
+
+                    monstro[i].x++;
+                 if (monstro[i].x<=0 || monstro[i].x>= MAX_tela_X)
                 {
                     monstro[i].x--;
-                } else if (monstro[i].x>=0)
-                {
-                    monstro[i].x++;
                 }
                 
                 imagem [monstro[i].y] [monstro[i].x]= monstro_1;
