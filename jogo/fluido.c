@@ -1,18 +1,34 @@
+// tenatndo implementar o buffer atraves do chat
 #include <stdio.h>
 #include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 // Configurações de tela
-#define MAX_tela_X 35
-#define MAX_tela_y 20
+#define MAX_tela_X 45
+#define MAX_tela_y 30
 #define MAX_margem 30
 
 // Configurações de jogo
 #define forma_jogador '^'
 #define forma_tiro '|'
-#define max_tiros 15
+#define max_tiros 30
 #define monstro_1 'M'
 #define monstro_2 'A'
-#define MAX_monstro 11 // Máximo de monstros por linha
+#define monstro_3 'w'
+#define MAX_monstro 10 // Máximo de monstros por linha
+
+//config barreiras
+#define barreira_forma_1 '#'
+#define barreira_forma_2 '*'
+#define barreira_forma_3 '.'
+#define max_barreira 49
+#define max_grupo 4
+#define max_barreiras_por_grupo 6 
+#define  max_espaco_grupo 4
+
+
 
 
 int ponto = 0;
@@ -21,6 +37,8 @@ int direcao = 1;
 int tempo_monstro = 0;
 int velocidade = 1;
 int posicao = MAX_tela_X / 10; // Posição inicial dos monstros
+int espaco = MAX_tela_X / (max_barreira + 1);
+
 char imagem[MAX_tela_y][MAX_tela_X] = {0};
 
 // Estruturas para tiros, monstros e jogador
@@ -38,7 +56,7 @@ typedef struct {
     int y;
 } bicho;
 
-bicho monstro[MAX_monstro * 2] = {{0, 0, 0}}; // Monstros superior e inferior
+bicho monstro[MAX_monstro * 2] = {{0, 0, 0}}; 
 
 typedef struct {
     int ativo;
@@ -46,7 +64,15 @@ typedef struct {
     int y;
 } bicho2;
 
-bicho2 monstro2[MAX_monstro*2] = {{0, 0, 0}}; // Monstros adicionais
+bicho2 monstro2[MAX_monstro*2] = {{0, 0, 0}}; 
+
+typedef struct {
+    int ativo;
+    int x;
+    int y;
+} bicho3;
+
+bicho3 monstro3[MAX_monstro] = {{0, 0, 0}};
 
 typedef struct {
     int x;
@@ -54,6 +80,35 @@ typedef struct {
 } jogado;
 
 jogado jogador_p;
+
+typedef struct {
+    int ativo;
+    int x;
+    int y;
+    int resistencia;
+} barreira;
+
+barreira barreiras[max_barreira] = {{0, 0, 0, 0}};
+// Função para configurar terminal e desabilitar a espera por Enter
+void configuracao_terminal(struct termios *old_tio) {
+    struct termios new_tio;
+
+    // Salva as configurações atuais do terminal
+    tcgetattr(STDIN_FILENO, old_tio);
+
+    // Configura um novo terminal
+    new_tio = *old_tio;
+    new_tio.c_lflag &= ~(ICANON | ECHO); // Desativa entrada canônica e eco
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
+
+    // Configura a leitura não bloqueante
+    fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
+}
+
+// Função para restaurar a configuração original do terminal
+void restaurar_terminal(struct termios *old_tio) {
+    tcsetattr(STDIN_FILENO, TCSANOW, old_tio);
+}
 
 // Função para limpar a tela
 void limpar() {
@@ -74,11 +129,11 @@ void tela() {
                 printf("_");
             } else if (imagem[i][j] == forma_jogador) {
                 printf("%c", forma_jogador);
-            } else if (imagem[i][j] == monstro_1) {
-                printf("%c", monstro_1);
-            } else if (imagem[i][j] == monstro_2) {
-                printf("%c", monstro_2);
-            } else if (imagem[i][j] == forma_tiro) {
+            } else if (imagem[i][j] == monstro_1 || imagem[i][j] == monstro_2 || imagem[i][j] == monstro_3) {
+                printf("%c", imagem [i][j]);
+            } else if (imagem[i][j] == barreira_forma_1 || imagem[i][j] == barreira_forma_2 || imagem [i][j]== barreira_forma_3) {
+                printf("%c", imagem[i][j]);
+             } else if (imagem[i][j] == forma_tiro) {
                 printf("%c", forma_tiro);
             } else {
                 printf(" ");
@@ -119,8 +174,33 @@ void inicia_monstros() {
         monstro2[i+MAX_monstro].x = posicao + (2 * i);
         monstro2[i+ MAX_monstro].y = (MAX_tela_y / 2) - 3;
         imagem[monstro2[i + MAX_monstro].y][monstro2[i + MAX_monstro].x] = monstro_2;
+
+        monstro3[i].ativo = 1;
+        monstro3[i].x = posicao + (2 * i);
+        monstro3[i].y = (MAX_tela_y / 2) - 4;
+        imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
+
     }
 }
+
+void inicia_barreira() {
+    int inicio_grupo = (MAX_tela_X - (max_grupo * max_barreiras_por_grupo) - ((max_grupo - 1) * max_espaco_grupo)) / 2;
+    int barreira_contagem = 0;
+
+    for (int i = 0; i < max_grupo; i++) {
+        for (int j = 0; j < max_barreiras_por_grupo; j++) {
+            barreiras[barreira_contagem].ativo = 1;
+            barreiras[barreira_contagem].x = inicio_grupo + (i * (max_barreiras_por_grupo + max_espaco_grupo)) + j;
+            barreiras[barreira_contagem].y = MAX_tela_y - 5;
+            barreiras[barreira_contagem].resistencia = 10;
+            
+            imagem[barreiras[barreira_contagem].y][barreiras[barreira_contagem].x] = barreira_forma_1;
+            
+            barreira_contagem++;
+        }
+    }
+}
+
 
 // Função para disparar tiros
 void disparos() {
@@ -138,8 +218,7 @@ void disparos() {
 // Função para mover o jogador e processar disparos
 void mover() {
     imagem[jogador_p.y][jogador_p.x] = ' ';
-    char move;
-    scanf("%c", &move);  
+    char move = getchar();
 
     if (move == 'a' && jogador_p.x > 1) {
         jogador_p.x--;
@@ -153,6 +232,7 @@ void mover() {
 
     imagem[jogador_p.y][jogador_p.x] = forma_jogador;
 }
+
 
 // Função para mover os tiros e verificar colisão com monstros
 void mover_tiro() {
@@ -174,28 +254,40 @@ void mover_tiro() {
                     monstro[j].ativo = 0;
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; 
+                    break;
                 }
             }
 
             // Verifica colisão com monstros do tipo 2
-            for (int j = 0; j < MAX_monstro*2; j++) {
+            for (int j = 0; j < MAX_monstro * 2; j++) {
                 if (monstro2[j].ativo && tiro[i].x == monstro2[j].x && tiro[i].y == monstro2[j].y) {
-                    ponto += 20; 
+                    ponto += 20; // Colisão com monstro 2
                     monstro2[j].ativo = 0;
                     imagem[monstro2[j].y][monstro2[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; 
+                    break;
+                }
+            }
+
+            // Verifica colisão com monstros do tipo 3
+            for (int j = 0; j < MAX_monstro; j++) {
+                if (monstro3[j].ativo && tiro[i].x == monstro3[j].x && tiro[i].y == monstro3[j].y) {
+                    ponto += 40; // Colisão com monstro 3
+                    monstro3[j].ativo = 0;
+                    imagem[monstro3[j].y][monstro3[j].x] = ' ';
+                    tiro[i].ativo = 0;
+                    break;
                 }
             }
         }
     }
 }
 
+
 // Função para mover monstros e atualizar suas posições
 void movimento_monstro() {
     tempo_monstro++;
-    if (tempo_monstro >= (5 - velocidade)) {
+    if (tempo_monstro >= (3 - velocidade)) {
         tempo_monstro = 0;
 
         // Remove monstros das posições atuais
@@ -212,6 +304,12 @@ void movimento_monstro() {
             }
         }
 
+        for (int i = 0; i < MAX_monstro; i++) {
+            if (monstro3[i].ativo) {
+                imagem[monstro3[i].y][monstro3[i].x] = ' ';
+            }
+        }
+
         
         for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro[i].ativo) {
@@ -220,21 +318,29 @@ void movimento_monstro() {
         }
 
         
-        for (int i = 0; i < MAX_monstro*2; i++) {
+        for (int i = 0; i < MAX_monstro * 2; i++) {
             if (monstro2[i].ativo) {
                 monstro2[i].x += direcao;
+            }
+        }
+        for (int i = 0; i < MAX_monstro; i++) {
+            if (monstro3[i].ativo) {
+                monstro3[i].x += direcao;
             }
         }
 
         
         for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1) || (monstro2[i].x <= 0 || monstro2[i].x >= MAX_tela_X - 1)) {
+            if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1) ||
+            monstro2[i].ativo && (monstro2[i].x <= 0 || monstro2[i].x >= MAX_tela_X - 1) ||
+            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x <= 0 || monstro3[i].x >= MAX_tela_X - 1)){
+            
                 direcao *= -1;
 
                 for (int j = 0; j < MAX_monstro * 2; j++) {
                     if (monstro[j].ativo) {
                         monstro[j].y += 1;
-                        if (monstro[j].y >= MAX_tela_y - 3) {
+                        if (monstro[j].y == MAX_tela_y - 3) {
                             vida--;
                             if (vida == 0) {
                                 printf("\nGame Over!\n");
@@ -243,11 +349,25 @@ void movimento_monstro() {
                         }
                     }
                 }
+               
 
-                for (int j = 0; j < MAX_monstro*2; j++) {
+                 for (int j = 0; j < MAX_monstro*2; j++) {
                     if (monstro2[j].ativo) {
                         monstro2[j].y += 1;
-                        if (monstro2[j].y >= MAX_tela_y - 3) {
+                        if (monstro2[j].y == MAX_tela_y - 3) {
+                            vida--;
+                            if (vida == 0) {
+                                printf("\nGame Over!\n");
+                                exit(0);
+                            }
+                        }
+                    }
+                 }
+               
+                 for (int j = 0; j < MAX_monstro; j++) {
+                    if (monstro3[j].ativo) {
+                        monstro3[j].y += 1;
+                        if (monstro3[j].y == MAX_tela_y - 3) {
                             vida--;
                             if (vida == 0) {
                                 printf("\nGame Over!\n");
@@ -256,6 +376,7 @@ void movimento_monstro() {
                         }
                     }
                 }
+                
 
                 velocidade++;
                 break;
@@ -275,19 +396,62 @@ void movimento_monstro() {
                 imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
             }
         }
+        for (int i = 0; i < MAX_monstro; i++) {
+            if (monstro3[i].ativo) {
+                imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
+            }
+        }
+    }
+}
+void colisao_com_barreiras() {
+    for (int i = 0; i < max_tiros; i++) {
+        if (tiro[i].ativo) {
+            for (int j = 0; j < max_barreira; j++) {
+                if (barreiras[j].ativo && 
+                    tiro[i].x == barreiras[j].x && 
+                    tiro[i].y == barreiras[j].y) {
+                    
+                    // Colisão detectada
+                    barreiras[j].resistencia--;
+                    tiro[i].ativo = 0;
+                    imagem[tiro[i].y][tiro[i].x] = ' ';
+                    
+                    // Atualiza a visualização da barreira conforme a resistência
+                    if ( barreiras[j].resistencia>7){
+                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_1;
+                    } else if (barreiras[j].resistencia>3 ) {
+                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_2;
+                    } else if (barreiras[j].resistencia>0) {
+                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_3;
+                    } else  {
+                        imagem[barreiras[j].y][barreiras[j].x] = ' ';
+                        barreiras[j].ativo = 0;
+                    }
+                }
+            }
+        }
     }
 }
 
 // Função principal do jogo
 int main() {
+    struct termios old_tio;
+
+    // Configura o terminal para não exigir Enter e leitura não bloqueante
+    configuracao_terminal(&old_tio);
+
     jogador();
     inicia_monstros();
+    inicia_barreira();
     while (1) {
         limpar();
         tela();
         mover();
         mover_tiro();
         movimento_monstro();
+        colisao_com_barreiras();
+        usleep(50000); // Aguarda 50ms antes de repetir o loop
     }
+     restaurar_terminal(&old_tio);
     return 0;
 }

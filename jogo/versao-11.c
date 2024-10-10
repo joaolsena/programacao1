@@ -258,124 +258,72 @@ void mover_tiro() {
 }
 
 // Função para mover monstros e atualizar suas posições
-void movimento_monstro() {
-    tempo_monstro++;
-    if (tempo_monstro >= (3 - velocidade)) {
-        tempo_monstro = 0;
+void limpa_posicao_monstros() {
+    for (int i = 0; i < MAX_monstro * 2; i++) {
+        if (monstro[i].ativo) imagem[monstro[i].y][monstro[i].x] = ' ';
+        if (monstro2[i].ativo) imagem[monstro2[i].y][monstro2[i].x] = ' ';
+        if (i < MAX_monstro && monstro3[i].ativo) imagem[monstro3[i].y][monstro3[i].x] = ' ';
+    }
+}
 
-        // Remove monstros das posições atuais
-        for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro[i].ativo) {
-                imagem[monstro[i].y][monstro[i].x] = ' ';
-            }
-        }
-        
-        
-        for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro2[i].ativo) {
-                imagem[monstro2[i].y][monstro2[i].x] = ' ';
-            }
-        }
+void atualiza_posicao_monstros() {
+    for (int i = 0; i < MAX_monstro * 2; i++) {
+        if (monstro[i].ativo) monstro[i].x += direcao;
+        if (monstro2[i].ativo) monstro2[i].x += direcao;
+        if (i < MAX_monstro && monstro3[i].ativo) monstro3[i].x += direcao;
+    }
+}
 
-        for (int i = 0; i < MAX_monstro; i++) {
-            if (monstro3[i].ativo) {
-                imagem[monstro3[i].y][monstro3[i].x] = ' ';
-            }
-        }
+void desce_linha_monstros() {
+    for (int i = 0; i < MAX_monstro * 2; i++) {
+        if (monstro[i].ativo) monstro[i].y += 1;
+        if (monstro2[i].ativo) monstro2[i].y += 1;
+        if (i < MAX_monstro && monstro3[i].ativo) monstro3[i].y += 1;
 
-        
-        for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro[i].ativo) {
-                monstro[i].x += direcao;
-            }
-        }
-
-        
-        for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro2[i].ativo) {
-                monstro2[i].x += direcao;
-            }
-        }
-        for (int i = 0; i < MAX_monstro; i++) {
-            if (monstro3[i].ativo) {
-                monstro3[i].x += direcao;
-            }
-        }
-
-        
-        for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1) ||
-            monstro2[i].ativo && (monstro2[i].x <= 0 || monstro2[i].x >= MAX_tela_X - 1) ||
-            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x <= 0 || monstro3[i].x >= MAX_tela_X - 1)){
-            
-                direcao *= -1;
-
-                for (int j = 0; j < MAX_monstro * 2; j++) {
-                    if (monstro[j].ativo) {
-                        monstro[j].y += 1;
-                        if (monstro[j].y == MAX_tela_y - 3) {
-                            vida--;
-                            if (vida == 0) {
-                                printf("\nGame Over!\n");
-                                exit(0);
-                            }
-                        }
-                    }
-                }
-               
-
-                 for (int j = 0; j < MAX_monstro*2; j++) {
-                    if (monstro2[j].ativo) {
-                        monstro2[j].y += 1;
-                        if (monstro2[j].y == MAX_tela_y - 3) {
-                            vida--;
-                            if (vida == 0) {
-                                printf("\nGame Over!\n");
-                                exit(0);
-                            }
-                        }
-                    }
-                 }
-               
-                 for (int j = 0; j < MAX_monstro; j++) {
-                    if (monstro3[j].ativo) {
-                        monstro3[j].y += 1;
-                        if (monstro3[j].y == MAX_tela_y - 3) {
-                            vida--;
-                            if (vida == 0) {
-                                printf("\nGame Over!\n");
-                                exit(0);
-                            }
-                        }
-                    }
-                }
-                
-
-                velocidade++;
-                break;
-            }
-        }
-
-        // Atualiza as novas posições dos monstros do tipo 1
-        for (int i = 0; i < MAX_monstro * 2; i++) {
-            if (monstro[i].ativo) {
-                imagem[monstro[i].y][monstro[i].x] = monstro_1;
-            }
-        }
-
-        
-        for (int i = 0; i < MAX_monstro*2; i++) {
-            if (monstro2[i].ativo) {
-                imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
-            }
-        }
-        for (int i = 0; i < MAX_monstro; i++) {
-            if (monstro3[i].ativo) {
-                imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
+        if ((monstro[i].y >= MAX_tela_y - 3 || monstro2[i].y >= MAX_tela_y - 3 || monstro3[i].y >= MAX_tela_y - 3) && vida > 0) {
+            vida--;
+            if (vida == 0) {
+                printf("\nGame Over!\n");
+                exit(0);
             }
         }
     }
 }
+
+void desenha_monstros_na_tela() {
+    for (int i = 0; i < MAX_monstro * 2; i++) {
+        if (monstro[i].ativo) imagem[monstro[i].y][monstro[i].x] = monstro_1;
+        if (monstro2[i].ativo) imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
+        if (i < MAX_monstro && monstro3[i].ativo) imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
+    }
+}
+
+void verifica_bordas_e_atualiza_direcao() {
+    for (int i = 0; i < MAX_monstro * 2; i++) {
+        if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1) ||
+            monstro2[i].ativo && (monstro2[i].x <= 0 || monstro2[i].x >= MAX_tela_X - 1) ||
+            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x <= 0 || monstro3[i].x >= MAX_tela_X - 1)) {
+            
+            direcao *= -1;
+            desce_linha_monstros();
+            velocidade++;
+            break;
+        }
+    }
+}
+
+void movimento_monstro() {
+    tempo_monstro++;
+    if (tempo_monstro >= (3 - velocidade)) {
+        tempo_monstro = 0;
+        limpa_posicao_monstros();
+        atualiza_posicao_monstros();
+        verifica_bordas_e_atualiza_direcao();
+        desenha_monstros_na_tela();
+    }
+}
+
+
 void colisao_com_barreiras() {
     for (int i = 0; i < max_tiros; i++) {
         if (tiro[i].ativo) {
