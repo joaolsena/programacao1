@@ -299,16 +299,19 @@ void desenha_monstros_na_tela() {
 }
 
 void verifica_bordas_e_atualiza_direcao() {
+    int borda=0;
     for (int i = 0; i < MAX_monstro * 2; i++) {
         if (monstro[i].ativo && (monstro[i].x <= 0 || monstro[i].x >= MAX_tela_X - 1) ||
             monstro2[i].ativo && (monstro2[i].x <= 0 || monstro2[i].x >= MAX_tela_X - 1) ||
             i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x <= 0 || monstro3[i].x >= MAX_tela_X - 1)) {
-            
-            direcao *= -1;
-            desce_linha_monstros();
-            velocidade++;
-            break;
+            borda=1;
+            velocidade++; 
+            break;  
         }
+    }
+    if(borda){
+        direcao *= -1;
+            desce_linha_monstros();     
     }
 }
 
@@ -322,7 +325,6 @@ void movimento_monstro() {
         desenha_monstros_na_tela();
     }
 }
-
 
 void colisao_com_barreiras() {
     for (int i = 0; i < max_tiros; i++) {
