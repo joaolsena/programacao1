@@ -1,15 +1,19 @@
+// tenatndo implementar o buffer atraves do chat
 #include <stdio.h>
 #include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 // Configurações de tela
-#define MAX_tela_X 50
+#define MAX_tela_X 45
 #define MAX_tela_y 30
 #define MAX_margem 30
 
 // Configurações de jogo
 #define forma_jogador '^'
 #define forma_tiro '|'
-#define max_tiros 3
+#define max_tiros 30
 #define monstro_1 'M'
 #define monstro_2 'A'
 #define monstro_3 'w'
@@ -85,6 +89,26 @@ typedef struct {
 } barreira;
 
 barreira barreiras[max_barreira] = {{0, 0, 0, 0}};
+// Função para configurar terminal e desabilitar a espera por Enter
+void configuracao_terminal(struct termios *old_tio) {
+    struct termios new_tio;
+
+    // Salva as configurações atuais do terminal
+    tcgetattr(STDIN_FILENO, old_tio);
+
+    // Configura um novo terminal
+    new_tio = *old_tio;
+    new_tio.c_lflag &= ~(ICANON | ECHO); // Desativa entrada canônica e eco
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
+
+    // Configura a leitura não bloqueante
+    fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
+}
+
+// Função para restaurar a configuração original do terminal
+void restaurar_terminal(struct termios *old_tio) {
+    tcsetattr(STDIN_FILENO, TCSANOW, old_tio);
+}
 
 // Função para limpar a tela
 void limpar() {
@@ -194,8 +218,7 @@ void disparos() {
 // Função para mover o jogador e processar disparos
 void mover() {
     imagem[jogador_p.y][jogador_p.x] = ' ';
-    char move;
-    scanf("%c", &move);  
+    char move = getchar();
 
     if (move == 'a' && jogador_p.x > 1) {
         jogador_p.x--;
@@ -210,6 +233,7 @@ void mover() {
     imagem[jogador_p.y][jogador_p.x] = forma_jogador;
 }
 
+
 // Função para mover os tiros e verificar colisão com monstros
 void mover_tiro() {
     for (int i = 0; i < max_tiros; i++) {
@@ -223,44 +247,47 @@ void mover_tiro() {
                 tiro[i].ativo = 0;
             }
 
-            
+            // Verifica colisão com monstros do tipo 1
             for (int j = 0; j < MAX_monstro * 2; j++) {
                 if (monstro[j].ativo && tiro[i].x == monstro[j].x && tiro[i].y == monstro[j].y) {
-                    ponto += 10; 
+                    ponto += 10; // Colisão com monstro 1
                     monstro[j].ativo = 0;
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; 
+                    break;
                 }
             }
 
-            
-            for (int j = 0; j < MAX_monstro*2; j++) {
+            // Verifica colisão com monstros do tipo 2
+            for (int j = 0; j < MAX_monstro * 2; j++) {
                 if (monstro2[j].ativo && tiro[i].x == monstro2[j].x && tiro[i].y == monstro2[j].y) {
-                    ponto += 20; 
+                    ponto += 20; // Colisão com monstro 2
                     monstro2[j].ativo = 0;
                     imagem[monstro2[j].y][monstro2[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; 
+                    break;
                 }
             }
+
+            // Verifica colisão com monstros do tipo 3
             for (int j = 0; j < MAX_monstro; j++) {
                 if (monstro3[j].ativo && tiro[i].x == monstro3[j].x && tiro[i].y == monstro3[j].y) {
-                    ponto += 40; 
+                    ponto += 40; // Colisão com monstro 3
                     monstro3[j].ativo = 0;
                     imagem[monstro3[j].y][monstro3[j].x] = ' ';
                     tiro[i].ativo = 0;
-                    break; 
+                    break;
                 }
             }
         }
     }
 }
 
+
 // Função para mover monstros e atualizar suas posições
 void movimento_monstro() {
     tempo_monstro++;
-    if (tempo_monstro >= (3 - velocidade)) {
+    if (tempo_monstro >= (11 - velocidade)) {
         tempo_monstro = 0;
 
         // Remove monstros das posições atuais
@@ -403,6 +430,11 @@ void colisao_com_barreiras() {
 
 // Função principal do jogo
 int main() {
+    struct termios old_tio;
+
+    // Configura o terminal para não exigir Enter e leitura não bloqueante
+    configuracao_terminal(&old_tio);
+
     jogador();
     inicia_monstros();
     inicia_barreira();
@@ -413,6 +445,8 @@ int main() {
         mover_tiro();
         movimento_monstro();
         colisao_com_barreiras();
+        usleep(50000); // Aguarda 50ms antes de repetir o loop
     }
+     restaurar_terminal(&old_tio);
     return 0;
 }
