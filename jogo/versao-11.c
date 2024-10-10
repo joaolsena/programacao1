@@ -314,7 +314,6 @@ void verifica_bordas_e_atualiza_direcao() {
             desce_linha_monstros();     
     }
 }
-
 void movimento_monstro() {
     tempo_monstro++;
     if (tempo_monstro >= (3 - velocidade)) {
