@@ -1,5 +1,6 @@
 // lista de coisas que faltam ser implementadas
-// Tiros inimigos que também possam destruir barreiras e atingir o jogador; Sistema de níveis com aumento de dificuldade; Ajuste dinâmico de velocidade conforme o número de monstros diminui e tela de game over e tela inicial E DEIXAR ESSA BOMBA FLUIDA
+// Tiros inimigos que também possam destruir barreiras e atingir o jogador; Sistema de níveis com aumento de dificuldade e tela de game over e tela inicial E DEIXAR ESSA BOMBA FLUIDA
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,7 +12,7 @@
 // Configurações de jogo
 #define forma_jogador '^'
 #define forma_tiro '|'
-#define max_tiros 30
+#define max_tiros 3
 #define monstro_1 'M'
 #define monstro_2 'A'
 #define monstro_3 'w'
@@ -243,15 +244,38 @@ void verifica_bordas_e_atualiza_direcao() {
             break;  
         }
     }
+
     if(borda){
         direcao *= -1;
             desce_linha_monstros();     
     }
 }
+void velocidade_monstro(){
+    int monstros_ativos = 0;
+     // Contagem de monstros do tipo 1 e 2
+    for (int i = 0; i < MAX_monstro * 2; i++) {
+        if (monstro[i].ativo) monstros_ativos++;
+        if (monstro2[i].ativo) monstros_ativos++;
+    }
+    
+    for (int i = 0; i < MAX_monstro; i++) {
+        if (monstro3[i].ativo) monstros_ativos++;
+    }
+
+    // Ajuste da velocidade com limite
+    if (monstros_ativos < (MAX_monstro * 5)/2) {  
+        if (velocidade <7)
+        {
+          velocidade++;
+        }   
+    }
+}
+
 void movimento_monstro() {
-    tempo_monstro++;
-    if (tempo_monstro >= (3 - velocidade)) {
-        tempo_monstro = 0;
+   tempo_monstro++;
+if (tempo_monstro >= (10 - velocidade)) {
+    tempo_monstro = 0;
+        velocidade_monstro();
         limpa_posicao_monstros();
         atualiza_posicao_monstros();
         verifica_bordas_e_atualiza_direcao();
