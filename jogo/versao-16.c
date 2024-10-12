@@ -14,7 +14,7 @@
 // Configurações de jogo
 #define forma_jogador 'A'
 #define forma_tiro '|'
-#define max_tiros 20
+#define max_tiros 2
 #define monstro_1 'M'
 #define monstro_2 'H'
 #define monstro_3 'W'
