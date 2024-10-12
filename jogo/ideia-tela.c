@@ -8,25 +8,24 @@ void iniciar_tela() {
 }
 
 void mostrar_titulo() {
-    char *titulo[] = {
-        "  _____                      _____           _           ",
-        " / ____|                    ||_   _|         (_)          ",
-        "| (___   ___  _ __ ___  _ __   | |  _ __  ___ _  ___  _ __ ",
-        " \\___ \\ / _ \\| '_ ` _ \\| '_ \\  | | | '_ \\/ __| |/ _ \\| '_ \\",
-        " ____) | (_) | | | | | | |_) |_| |_| | | \\__ \\ | (_) | | | |",
-        "|_____/ \\___/|_| |_| |_| .__/|_____|_| |_|___/_|\\___/|_| |_|",
-        "                      | |                                 ",
-        "                      |_|                                 ",
-        "====================== PRESS ENTER ========================"
-    };
+   const char *game_over[] = {
+    "  _____                         ____                  ",
+    " / ____|                       / __ \\                 ",
+    "| |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __  ",
+    "| | |_ |/ _` | '_ ` _ \\ / _ \\ | |  | \\ \\ / / _ \\ '__| ",
+    "| |__| | (_| | | | | | |  __/ | |__| |\\ V /  __/ |    ",
+    " \\_____|\__,_|_| |_| |_|\\___|  \\____/  \\_/ \\___|_|    ",
+    "                                                      ",
+    "====================== PRESS ENTER ======================="
+};
 
-    int linhas = 9; // Número de linhas do título
+    int linhas = 8; // Número de linhas do título
     int x, y;
     getmaxyx(stdscr, y, x); // Pega o tamanho atual da tela
 
     // Centraliza o título na tela
     for (int i = 0; i < linhas; i++) {
-        mvprintw((y / 2 - linhas / 2) + i, (x - 55) / 2, "%s", titulo[i]);
+        mvprintw((y / 2 - linhas / 2) + i, (x - 55) / 2, "%s", game_over[i]);
     }
 
     refresh();
@@ -40,8 +39,7 @@ void esperar_tecla() {
         }
     }
 }
-
-int main() {
+void iniciar(){
     iniciar_tela();
     mostrar_titulo();
 
@@ -50,10 +48,14 @@ int main() {
 
     // Limpa a tela e inicia o jogo (simulação)
     clear();
-    mvprintw(10, 10, "Iniciando o jogo...");
+    mvprintw(10, 10, "carregando...");
     refresh();
     sleep(2); // Pausa para simulação
 
     endwin(); // Finaliza o modo ncurses
+}
+
+int main() {
+    iniciar();
     return 0;
 }
