@@ -1,6 +1,6 @@
 // lista de coisas que faltam ser implementadas
 // Tiros inimigos que também possam destruir barreiras e atingir o jogador; Sistema de níveis com aumento de dificuldade e tela de game over e tela inicial E DEIXAR ESSA BOMBA FLUIDA.
-// deixei bonito
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
