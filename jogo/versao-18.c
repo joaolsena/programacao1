@@ -252,6 +252,7 @@ void tela_game_over() {
     if (fim == 'f')
     {
         // preciso arrumar, todo bugado
+        limpar();
         configuracoes_iniciais();
         break;
     }else if (fim == 'q')
