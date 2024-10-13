@@ -236,13 +236,22 @@ void tela_inicial() {
     } while (1);
 }
 
-// Reinicia o estado do jogo completamente
+// Função para limpar todos os elementos da tela
+void limpa_tela() {
+    for (int i = 0; i < MAX_tela_y; i++) {
+        for (int j = 0; j < MAX_tela_X; j++) {
+            imagem[i][j] = ' ';
+        }
+    }
+}
+
 void renicia_jogo() {
+    limpa_tela();  
     ponto = 0;
     vida = 3;
     tempo_monstro = 0; 
     velocidade = 1;
-    level = 1;   
+    level = 1; 
 }
 
 void tela_game_over() {
