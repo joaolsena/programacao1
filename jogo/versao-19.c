@@ -14,7 +14,7 @@
 // Configurações de jogo
 #define forma_jogador 'A'
 #define forma_tiro '|'
-#define max_tiros 20
+#define max_tiros 3
 #define monstro_1 'M'
 #define monstro_2 'H'
 #define monstro_3 'W'
@@ -389,7 +389,7 @@ void velocidade_monstro(){
 
 void movimento_monstro() {
    tempo_monstro++;
-if (tempo_monstro >= (1- velocidade)) {
+if (tempo_monstro >= (11 -velocidade)) {
     tempo_monstro = 0;
         velocidade_monstro();
         limpa_posicao_monstros();

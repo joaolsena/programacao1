@@ -37,9 +37,12 @@ int vida = 3;
 int direcao = 1;
 int tempo_monstro = 0;
 int velocidade = 1;
-int posicao = MAX_tela_X / 10; // Posição inicial dos monstros
-int espaco = MAX_tela_X / (max_barreira + 1);
-
+int level = 1;
+int contador;
+int pontuacao_maxima = 0;
+char move;
+char fim;
+char opcao;
 char imagem[MAX_tela_y][MAX_tela_X] = {0};
 
 // Estruturas para tiros, monstros e jogador
@@ -112,15 +115,29 @@ void restaurar_terminal(struct termios *old_tio) {
 }
 
 // Função para limpar a tela
+int getch(void) {
+    struct termios oldt, newt;
+    int move;
+    tcgetattr(STDIN_FILENO, &oldt);            
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);          
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);  
+    move = getchar();                            
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);   
+    return move;
+}
+
+// Função para limpar a tela
 void limpar() {
-     printf("\033[H\033[J");// Usar "cls" no Windows
+    system("clear"); // Usar "cls" no Windows
 }
 
 // Função para desenhar a tela
 void tela() {
   
-    printf("%*sPontos: %d", MAX_margem + 25, " ", ponto);
-    printf("%*sVidas: %d\n", MAX_margem + 15, "", vida);
+    printf("%*sPontos: %d", MAX_margem + 30, "", ponto);
+    printf("%*snivel: %d", MAX_margem -15 , "", level);
+    printf("%*svida: %d\n",15, "", vida);
     
     for (int i = 0; i < MAX_tela_y; i++) {
         for (int k = 0; k < MAX_margem; k++) {
@@ -168,29 +185,29 @@ void inicia_monstros() {
     for (int i = 0; i < MAX_monstro; i++) {
         
         monstro[i].ativo = 1;
-        monstro[i].x = (MAX_tela_X / 10) + (2 * i);
-        monstro[i].y = MAX_tela_y / 2;
+        monstro[i].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro[i].y = (MAX_tela_y / 2) -2;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
 
         monstro[i + MAX_monstro].ativo = 1;
-        monstro[i + MAX_monstro].x = (MAX_tela_X / 10) + (2 * i);
-        monstro[i + MAX_monstro].y = (MAX_tela_y / 2) - 1;
+        monstro[i + MAX_monstro].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro[i + MAX_monstro].y = (MAX_tela_y / 2) - 3;
         imagem[monstro[i + MAX_monstro].y][monstro[i + MAX_monstro].x] = monstro_1;
 
         
         monstro2[i].ativo = 1;
-        monstro2[i].x = (MAX_tela_X / 10) + (2 * i);
-        monstro2[i].y = (MAX_tela_y / 2) - 2;
+        monstro2[i].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro2[i].y = (MAX_tela_y / 2) - 4;
         imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
 
         monstro2[i+MAX_monstro].ativo = 1;
-        monstro2[i+MAX_monstro].x = (MAX_tela_X / 10) + (2 * i);
-        monstro2[i+ MAX_monstro].y = (MAX_tela_y / 2) - 3;
+        monstro2[i+MAX_monstro].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro2[i+ MAX_monstro].y = (MAX_tela_y / 2) - 5;
         imagem[monstro2[i + MAX_monstro].y][monstro2[i + MAX_monstro].x] = monstro_2;
 
         monstro3[i].ativo = 1;
-        monstro3[i].x = (MAX_tela_X / 10) + (2 * i);
-        monstro3[i].y = (MAX_tela_y / 2) - 4;
+        monstro3[i].x =((MAX_tela_X / 10)-4) + (2 * i);
+        monstro3[i].y = (MAX_tela_y / 2) - 6;
         imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
 
     }
@@ -218,6 +235,74 @@ void configuracoes_iniciais(){
     inicia_monstros();
     inicia_barreira();
 }
+void tela_inicial() {
+    do {
+        limpar();
+        printf("-------------------------------------------------\n");
+        printf("                  SPACE INVADERS                 \n");
+        printf("-------------------------------------------------\n");
+        printf("  Pressione 's' para iniciar o jogo\n");
+        printf("  Pressione 'i' para ver as instruções\n");
+        printf("  Pressione 'q' para sair\n");
+        printf("-------------------------------------------------\n");
+        opcao = getch();
+        if (opcao == 's') {
+            configuracoes_iniciais();
+            break; 
+        } else if (opcao == 'i') {
+           // fazer uma bagulho de instrucoes do jogo algum dia ou so desisto 
+        } else if (opcao == 'q') {
+            exit(0);
+        }
+    } while (1);
+}
+
+// Função para limpar todos os elementos da tela
+void limpa_tela() {
+    for (int i = 0; i < MAX_tela_y; i++) {
+        for (int j = 0; j < MAX_tela_X; j++) {
+            imagem[i][j] = ' ';
+        }
+    }
+}
+
+void renicia_jogo() {
+    limpa_tela();  
+    ponto = 0;
+    vida = 3;
+    tempo_monstro = 0; 
+    velocidade = 1;
+    level = 1; 
+}
+
+void tela_game_over() {
+    do
+    {
+    limpar();
+    printf("-------------------------------------------------\n");
+    printf("                   GAME OVER                     \n");
+    printf("-------------------------------------------------\n");
+     printf("        Pontuação maxima: %d\n", pontuacao_maxima);
+    printf("-------------------------------------------------\n");
+    printf("        Pontuação Final: %d\n", ponto);
+    printf("-------------------------------------------------\n");
+     printf("        Nivel Final: %d\n", level);
+    printf("-------------------------------------------------\n");
+    printf("Pressione f para voltar ao jogo ou q para sair...\n");
+    fim = getch();
+    if (fim == 'f')
+    {   // preciso arrumar, aparece residuos de monstros.
+        renicia_jogo();
+        configuracoes_iniciais();
+        limpar();
+        break;
+    }else if (fim == 'q')
+    {
+       exit(0); 
+    } 
+    } while (1);
+}
+
 // Função para disparar tiros
 void disparos() {
     for (int i = 0; i < max_tiros; i++) {
@@ -253,11 +338,10 @@ void desce_linha_monstros() {
         if (monstro2[i].ativo) monstro2[i].y += 1;
         if (i < MAX_monstro && monstro3[i].ativo) monstro3[i].y += 1;
 
-        if ((monstro[i].y >= MAX_tela_y - 3 || monstro2[i].y >= MAX_tela_y - 3 || monstro3[i].y >= MAX_tela_y - 3) && vida > 0) {
+        if ((monstro[i].y >= MAX_tela_y - 3 || monstro2[i].y >= MAX_tela_y - 3 || monstro3[i].y >= MAX_tela_y - 2) && vida > 0) {
             vida--;
             if (vida == 0) {
-                printf("\nGame Over!\n");
-                exit(0);
+                tela_game_over();
             }
         }
     }
@@ -302,16 +386,31 @@ void velocidade_monstro(){
 
     // Ajuste da velocidade com limite
     if (monstros_ativos < (MAX_monstro * 5)/2) {  
-        if (velocidade <7)
+        if (velocidade <5)
         {
           velocidade++;
         }   
     }
+    if (monstros_ativos == 0)
+    { 
+         inicia_monstros();
+         inicia_monstros();
+         level++;
+          velocidade=0;
+          for (int i = 0; i < level; i++)
+          {
+            contador++;
+          }
+          velocidade= contador;
+          velocidade+=1;
+          contador=0;
+
+    } 
 }
 
 void movimento_monstro() {
    tempo_monstro++;
-if (tempo_monstro >= (10 - velocidade)) {
+if (tempo_monstro >= (11 -velocidade)) {
     tempo_monstro = 0;
         velocidade_monstro();
         limpa_posicao_monstros();
@@ -320,11 +419,10 @@ if (tempo_monstro >= (10 - velocidade)) {
         desenha_monstros_na_tela();
     }
 }
-
 // Função para mover o jogador e processar disparos
 void mover() {
     imagem[jogador_p.y][jogador_p.x] = ' ';
-    char move = getchar();  
+     move = getch();  
 
     if (move == 'a' && jogador_p.x > 1) {
         jogador_p.x--;
@@ -375,6 +473,10 @@ for (int i = 0; i < max_tiros; i++) {
             }
         }
     }
+    if (pontuacao_maxima< ponto)
+    {
+        pontuacao_maxima=ponto;
+    }
 }
 void colisao_com_barreiras() {
     for (int i = 0; i < max_tiros; i++) {
@@ -424,19 +526,23 @@ void tiro_e_colisao() {
 
 // Função principal do jogo
 int main() {
-    struct termios old_tio;
+struct termios old_tio;
+configuracao_terminal(&old_tio);
 
-    // Configura o terminal para não exigir Enter e leitura não bloqueante
-    configuracao_terminal(&old_tio);
+    tela_inicial();
 
-    configuracoes_iniciais();
-    while (1) {
-         limpar();
+    while (vida>0) {
+        limpar();
         tela();
         mover();
         tiro_e_colisao();
-        usleep(50000); // Aguarda 50ms antes de repetir o loop
+         usleep(50000); 
     }
-     restaurar_terminal(&old_tio);
+    restaurar_terminal(&old_tio);
     return 0;
 }
+
+
+ 
+ 
+  
