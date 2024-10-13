@@ -235,13 +235,14 @@ void tela_inicial() {
         }
     } while (1);
 }
-void renicia_jogo(){
 
-        ponto = 0;
-        vida = 3;
-        tempo_monstro = 0; 
-        velocidade = 1;
-        level = 1;
+// Reinicia o estado do jogo completamente
+void renicia_jogo() {
+    ponto = 0;
+    vida = 3;
+    tempo_monstro = 0; 
+    velocidade = 1;
+    level = 1;   
 }
 
 void tela_game_over() {
@@ -262,8 +263,8 @@ void tela_game_over() {
     if (fim == 'f')
     {   // preciso arrumar, aparece residuos de monstros.
         renicia_jogo();
-         limpar();
         configuracoes_iniciais();
+        limpar();
         break;
     }else if (fim == 'q')
     {
@@ -498,7 +499,7 @@ int main() {
 
     tela_inicial();
 
-    while (1) {
+    while (vida>0) {
         limpar();
         tela();
         mover();
