@@ -14,7 +14,7 @@
 // Configurações de jogo
 #define forma_jogador 'A'
 #define forma_tiro '|'
-#define max_tiros 3
+#define max_tiros 30
 #define monstro_1 'M'
 #define monstro_2 'H'
 #define monstro_3 'W'
@@ -256,10 +256,10 @@ void reinicia_jogo() {
         tiro[i].ativo = 0; // Reseta os tiros
     }
     for (int i = 0; i < MAX_monstro * 2; i++) {
-        monstro[i].ativo = 0; // Reseta os monstros tipo 1
-        monstro2[i].ativo = 0; // Reseta os monstros tipo 2
+        monstro[i].ativo = 0; // Reseta os monstros 
+        monstro2[i].ativo = 0; 
         if (i < MAX_monstro) {
-            monstro3[i].ativo = 0; // Reseta os monstros tipo 3
+            monstro3[i].ativo = 0; 
         }
     }
     for (int i = 0; i < max_barreira; i++) {
@@ -337,8 +337,8 @@ void desce_linha_monstros() {
         }
     }
     if (vida == 0) {
-                tela_game_over();
-            }
+       tela_game_over();
+    }
 }
 
 void desenha_monstros_na_tela() {
@@ -388,7 +388,6 @@ void velocidade_monstro(){
     if (monstros_ativos == 0)
     { 
          inicia_monstros();
-         inicia_monstros();
          level++;
           velocidade=0;
           for (int i = 0; i < level; i++)
@@ -404,7 +403,7 @@ void velocidade_monstro(){
 
 void movimento_monstro() {
    tempo_monstro++;
-if (tempo_monstro >= (1 -velocidade)) {
+if (tempo_monstro >= (11 -velocidade)) {
     tempo_monstro = 0;
         velocidade_monstro();
         limpa_posicao_monstros();
@@ -505,18 +504,25 @@ void tiro_e_colisao() {
     for (int i = 0; i < max_tiros; i++) {
         if (tiro[i].ativo) {
             imagem[tiro[i].y][tiro[i].x] = ' ';
-
-            if (tiro[i].y > 1) {
-                tiro[i].y--;
-                imagem[tiro[i].y][tiro[i].x] = forma_tiro;
-            } else {
+            tiro[i].y--;
+            
+            if (tiro[i].y < 0) {
                 tiro[i].ativo = 0;
-            }  
+            } else {
+                // Verifica colisão com monstros
+                colisao_com_monstro();
+                // Verifica colisão com barreiras
+                colisao_com_barreiras();
+                
+                // Se o tiro ainda estiver ativo, desenhá-lo na nova posição
+                if (tiro[i].ativo) {
+                    imagem[tiro[i].y][tiro[i].x] = forma_tiro;
+                }
+            }
         }
     }
-    colisao_com_monstro();
-    colisao_com_barreiras();
 }
+
 
 // Função principal do jogo
 int main() {
