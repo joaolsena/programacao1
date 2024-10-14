@@ -129,7 +129,7 @@ int getch(void) {
 
 // Função para limpar a tela
 void limpar() {
-    system("clear"); // Usar "cls" no Windows
+    printf("\033[H\033[J");  // Limpa a tela no terminal
 }
 
 // Função para desenhar a tela
@@ -273,6 +273,7 @@ void renicia_jogo() {
     tempo_monstro = 0; 
     velocidade = 1;
     level = 1; 
+    
 }
 
 void tela_game_over() {
@@ -340,9 +341,10 @@ void desce_linha_monstros() {
 
         if ((monstro[i].y >= MAX_tela_y - 3 || monstro2[i].y >= MAX_tela_y - 3 || monstro3[i].y >= MAX_tela_y - 2) && vida > 0) {
             vida--;
-            if (vida == 0) {
-                tela_game_over();
-            }
+            if (vida <= 0) {
+               tela_game_over();
+}
+
         }
     }
 }
@@ -531,13 +533,14 @@ configuracao_terminal(&old_tio);
 
     tela_inicial();
 
-    while (vida>0) {
-        limpar();
-        tela();
-        mover();
-        tiro_e_colisao();
-         usleep(50000); 
-    }
+   while (vida > 0) {
+    limpar();          // Limpa a tela
+    mover();           // Lida com movimento do jogador e atualização de monstros
+    tiro_e_colisao();  // Movimenta os tiros e verifica colisões
+    tela();            // Desenha o estado atual do jogo
+    usleep(100000);    // Pausa para controlar a velocidade do jogo
+}
+
     restaurar_terminal(&old_tio);
     return 0;
 }
