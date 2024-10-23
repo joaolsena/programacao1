@@ -21,7 +21,7 @@
 #define monstro_3 'W'
 #define monstro_4  'X'
 #define MAX_monstro 10 // Máximo de monstros por linha
-#define ATRASO_TIQUE 50 
+#define ATRASO_TIQUE 7
 
 //config barreiras
 #define barreira_forma_1 '#'
@@ -177,28 +177,28 @@ void inicia_monstros() {
     for (int i = 0; i < MAX_monstro; i++) {
         
         monstro[i].ativo = 1;
-        monstro[i].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro[i].x = 0 + (2 * i);
         monstro[i].y = (MAX_tela_y / 2) -2;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
 
         monstro[i + MAX_monstro].ativo = 1;
-        monstro[i + MAX_monstro].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro[i + MAX_monstro].x = 0 + (2 * i);
         monstro[i + MAX_monstro].y = (MAX_tela_y / 2) - 3;
         imagem[monstro[i + MAX_monstro].y][monstro[i + MAX_monstro].x] = monstro_1;
 
         
         monstro2[i].ativo = 1;
-        monstro2[i].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro2[i].x = 0 + (2 * i);
         monstro2[i].y = (MAX_tela_y / 2) - 4;
         imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
 
         monstro2[i+MAX_monstro].ativo = 1;
-        monstro2[i+MAX_monstro].x = ((MAX_tela_X / 10)-4) + (2 * i);
+        monstro2[i+MAX_monstro].x = 0 + (2 * i);
         monstro2[i+ MAX_monstro].y = (MAX_tela_y / 2) - 5;
         imagem[monstro2[i + MAX_monstro].y][monstro2[i + MAX_monstro].x] = monstro_2;
 
         monstro3[i].ativo = 1;
-        monstro3[i].x =((MAX_tela_X / 10)-4) + (2 * i);
+        monstro3[i].x = 0 + (2 * i);
         monstro3[i].y = (MAX_tela_y / 2) - 6;
         imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
 
@@ -332,7 +332,7 @@ void gera_monstro_especial(){
             if (num == 0) { 
                 monstro4.ativo = 1;
                 if(direcao2 == 1){
-                monstro4.x = 1;
+                monstro4.x = 0;
                  }
                 else{
                     monstro4.x=MAX_tela_X-1;
@@ -421,7 +421,7 @@ void velocidade_monstro(){
     // Ajuste da velocidade  //arrumar isso pois aumenta varias vezes enquanto estiver com 25
     if (monstros_ativos == (MAX_monstro * 5)/2) {  
         {
-            if(velocidade<6) //tentar usar o break para arrumas so que mais tarde
+            if(velocidade<6) 
           velocidade+=3;
         }   
     }
@@ -443,7 +443,6 @@ void velocidade_monstro(){
 
     } 
 }
-
 
 void movimento_monstro() {
    tempo_monstro++;
@@ -515,6 +514,7 @@ for (int i = 0; i < max_tiros; i++) {
                 monstro4.ativo=0;
                 imagem[monstro4.y] [monstro4.x] = ' ';
                 tiro[i].ativo = 0;
+                break;
             }
         }
     }
@@ -561,12 +561,11 @@ void tiro_e_colisao() {
             if (tiro[i].y < 0) {
                 tiro[i].ativo = 0;
             } else {
-                // Verifica colisão com monstros
+                
                 colisao_com_monstro();
-                // Verifica colisão com barreiras
+                
                 colisao_com_barreiras();
                 
-                // Se o tiro ainda estiver ativo, desenhá-lo na nova posição
                 if (tiro[i].ativo) {
                     imagem[tiro[i].y][tiro[i].x] = forma_tiro;
                 }
@@ -574,7 +573,6 @@ void tiro_e_colisao() {
         }
     }
 }
-
 
 // Função principal do jogo
 int main() {
