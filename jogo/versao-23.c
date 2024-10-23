@@ -19,7 +19,7 @@
 #define monstro_1 'M'
 #define monstro_2 'H'
 #define monstro_3 'W'
-#define monstro_4  'x'
+#define monstro_4  'X'
 #define MAX_monstro 10 // Máximo de monstros por linha
 #define ATRASO_TIQUE 50 
 

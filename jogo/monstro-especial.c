@@ -10,9 +10,9 @@
 // jogo
 #define forma_jogador '^'
 #define forma_tiro '|'
-#define max_tiros 5
+#define max_tiros 20
 #define monstro_1 'M'
-#define monstro_2 'x'
+#define monstro_4 'x'
 #define MAX_monstro 15 // máximo de monstro por linha
 
 // a para a esquerda. d para a direita. espaço para atirar. q para sair.
@@ -42,9 +42,9 @@ typedef struct {
     int ativo;
     int x;
     int y;
-} bichoo;
+} bicho4;
 
-bichoo monstro2 = {0, 0, 0};
+bicho4 monstro4 = {0, 0, 0};
 
 typedef struct {
     int x;
@@ -73,8 +73,8 @@ void tela() {
                 printf("%c", forma_jogador);
             } else if (imagem[i][j] == monstro_1) {
                 printf("%c", monstro_1);
-            } else if (imagem[i][j] == monstro_2) {
-                printf("%c", monstro_2);
+            } else if (imagem[i][j] == monstro_4) {
+                printf("%c", monstro_4);
             } else if (imagem[i][j] == forma_tiro) {
                 printf("%c", forma_tiro);
             } else {
@@ -85,7 +85,7 @@ void tela() {
     }
 }
 
-int c = 0;
+
 void jogador() {
     jogador_p.x = MAX_tela_X / 2;
     jogador_p.y = MAX_tela_y - 2;
@@ -100,7 +100,7 @@ void inicia_monstros() {
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
     }
 }
-
+int direcao2=1;
 int direcao = 1;
 void movimento_monstro() {
     for (int i = 0; i < MAX_monstro; i++) {
@@ -123,27 +123,36 @@ void movimento_monstro() {
     }
 
     
-        if (!monstro2.ativo) {
-            // Gera um número aleatório para determinar se o monstro2 deve aparecer
+    
+        if (!monstro4.ativo) {
+            // Gera um número aleatório para determinar se o monstro4 deve aparecer
             int num = rand() % 20; 
             if (num == 0) { 
-                monstro2.ativo = 1;
-                monstro2.x = 0; 
-                monstro2.y = 0; 
+                monstro4.ativo = 1;
+                if(direcao2 == 1){
+                monstro4.x = 0;
+                 }
+                else{
+                    monstro4.x=MAX_tela_X-1;
+                }
+                monstro4.y = 0; 
             }
         }
-
-        if (monstro2.ativo) {
-            imagem[monstro2.y][monstro2.x] = ' '; 
-            monstro2.x++; 
-            
-            if (monstro2.x >= MAX_tela_X) {
-                monstro2.ativo = 0; 
-            }
-            imagem[monstro2.y][monstro2.x] = monstro_2; 
+        if (monstro4.ativo) {
+            imagem[monstro4.y][monstro4.x] = ' '; 
+            monstro4.x+= direcao2; 
         }
-        c = 0; 
+        if (monstro4.ativo && (monstro4.x >= MAX_tela_X - 1 || monstro4.x <= 0)) {
+                monstro4.ativo = 0; 
+                direcao2 *= -1;
+            } 
+            if(monstro4.ativo){
+            imagem[monstro4.y][monstro4.x] = monstro_4; 
+            }
+        
+         
     }
+    
 
 
 void disparos() {
@@ -181,7 +190,7 @@ void mover_tiro() {
         if (tiro[i].ativo) {
             imagem[tiro[i].y][tiro[i].x] = ' ';
 
-            if (tiro[i].y > 1) {
+            if (tiro[i].y > -1) {
                 tiro[i].y--;
                 imagem[tiro[i].y][tiro[i].x] = forma_tiro;
             } else {
@@ -195,6 +204,13 @@ void mover_tiro() {
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
                 }
+            }
+                if(monstro4.ativo && tiro[i].x == monstro4.x && tiro[i].y == monstro4.y){
+                int numero = rand() %500;
+                ponto+= numero;
+                monstro4.ativo=0;
+                imagem[monstro4.y] [monstro4.x] = ' ';
+                tiro[i].ativo = 0;
             }
         }
     }
