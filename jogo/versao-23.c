@@ -332,7 +332,7 @@ void gera_monstro_especial(){
             if (num == 0) { 
                 monstro4.ativo = 1;
                 if(direcao2 == 1){
-                monstro4.x = 2;
+                monstro4.x = 1;
                  }
                 else{
                     monstro4.x=MAX_tela_X-1;
@@ -421,6 +421,7 @@ void velocidade_monstro(){
     // Ajuste da velocidade  //arrumar isso pois aumenta varias vezes enquanto estiver com 25
     if (monstros_ativos == (MAX_monstro * 5)/2) {  
         {
+            if(velocidade<6) //tentar usar o break para arrumas so que mais tarde
           velocidade+=3;
         }   
     }
