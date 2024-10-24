@@ -1,5 +1,5 @@
 // lista de coisas que faltam ser implementadas
-// Tiros inimigos que também possam destruir barreiras e atingir o jogador E DEIXAR ESSA BOMBA FLUIDA...
+//  DEIXAR ESSA BOMBA FLUIDA...
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +22,7 @@
 #define monstro_3 'W'
 #define monstro_4  'X'
 #define MAX_monstro 10 // Máximo de monstros por linha
-#define max_tiro_monstro 2
+#define max_tiro_monstro 3
 #define ATRASO_TIQUE 7
 
 //config barreiras
