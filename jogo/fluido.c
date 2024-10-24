@@ -1,5 +1,5 @@
 // lista de coisas que faltam ser implementadas
-//  DEIXAR ESSA BOMBA FLUIDA...
+//  delei no tiro do monstro e fazer o monstro3 atirar. 
 
 #include <stdio.h>
 #include <stdlib.h>
