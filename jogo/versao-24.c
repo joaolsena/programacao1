@@ -126,7 +126,7 @@ void limpar() {
 // Função para desenhar a tela
 void tela() {
   
-    printf("%*sPontos: %d", MAX_margem + 30, "", ponto);
+    printf("%*sPontos: %d", MAX_margem + 27, "", ponto);
     printf("%*snivel: %d", MAX_margem -15 , "", level);
     printf("%*svida: %d\n",15, "", vida);
     

@@ -11,18 +11,16 @@
 #define forma_jogador '^'
 #define forma_tiro '|'
 #define max_tiros 20
-#define max_tiro_monstro 3
+#define max_tiro_monstro 4
 #define monstro_1 'M'
 #define monstro_4 'x'
 #define MAX_monstro 15 // máximo de monstro por linha
 
 // a para a esquerda. d para a direita. espaço para atirar. q para sair.
-
 int ponto = 0;
 int vida = 3;
 int posicao = MAX_tela_X / 10; // posiciona cada monstro um do lado do outro se encontra no void inicia monstro
 char imagem[MAX_tela_y][MAX_tela_X] = {0};
-
 typedef struct {
     int ativo;
     int x;
@@ -146,7 +144,8 @@ void mover() {
         jogador_p.x--;
     } else if (move == 'd' && jogador_p.x < MAX_tela_X - 2) {
         jogador_p.x++;
-    } else if (move == ' ') {
+       
+    } else if (move== ' ') {
         disparos();
     } else if (move == 'q') {
         exit(0);
@@ -180,8 +179,37 @@ void mover_tiro() {
     }
 }
 
-void tiro_monster(){
-    
+void tiro_monster() {
+    for (int i = 0; i < max_tiro_monstro; i++) {
+        if (!tiro_monstros[i].ativo) {
+            // Seleciona aleatoriamente um monstro para disparar
+            int monstro_atirador = rand() % MAX_monstro;
+            if (monstro[monstro_atirador].ativo) {
+                tiro_monstros[i].ativo = 1;
+                tiro_monstros[i].x = monstro[monstro_atirador].x;
+                tiro_monstros[i].y = monstro[monstro_atirador].y + 1;
+            }
+        } else {
+            // Movimento do tiro do monstro
+            imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+            if (tiro_monstros[i].y < MAX_tela_y - 1) {
+                tiro_monstros[i].y++;
+                imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro;
+            } else {
+                tiro_monstros[i].ativo = 0;
+            }
+
+            // Verifica se o tiro do monstro atingiu o jogador
+            if (tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
+                vida--;
+                tiro_monstros[i].ativo = 0;
+                if (vida <= 0) {
+                    printf("Game Over!\n");
+                    exit(0);
+                }
+            }
+        }
+    }
 }
 
 int main() {
@@ -194,6 +222,7 @@ int main() {
         mover();
         mover_tiro();
         movimento_monstro();
+        tiro_monster();
     }
     return 0;
 }
