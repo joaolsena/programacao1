@@ -115,25 +115,29 @@ typedef struct {
 } barreira;
 
 barreira barreiras[max_barreira] = {{0, 0, 0, 0}};
+int kbhit(void) {
+    struct termios oldt, newt;
+    int ch;
+    int oldf;
 
-void configuracao_terminal(struct termios *old_tio) {
-    struct termios new_tio;
+    tcgetattr(STDIN_FILENO, &oldt); // Salva as configurações atuais do terminal
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Aplica as novas configurações
+    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK); // Modo não-bloqueante
 
-    // Salva as configurações atuais do terminal
-    tcgetattr(STDIN_FILENO, old_tio);
+    ch = getchar();
 
-    // Configura um novo terminal
-    new_tio = *old_tio;
-    new_tio.c_lflag &= ~(ICANON | ECHO); // Desativa entrada canônica e eco
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restaura as configurações originais
+    fcntl(STDIN_FILENO, F_SETFL, oldf);
 
-    // Configura a leitura não bloqueante
-    fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
-}
+    if (ch != EOF) {
+        ungetc(ch, stdin); // Devolve o caractere ao buffer de entrada
+        return 1;
+    }
 
-// Função para restaurar a configuração original do terminal
-void restaurar_terminal(struct termios *old_tio) {
-    tcsetattr(STDIN_FILENO, TCSANOW, old_tio);
+    return 0;
 }
 
 
@@ -511,22 +515,16 @@ if (tempo_monstro >= (16 -(velocidade + velocidade1))) {
     }
 }
 // Função para mover o jogador e processar disparos
-void mover() {
-    imagem[jogador_p.y][jogador_p.x] = ' ';
-     move = getch();  
-
-    if (move == 'a' && jogador_p.x > 1) {
+void move_jogador(char movimento) {
+    imagem[jogador_p.y][jogador_p.x] = ' ';  // Apaga a posição anterior
+    
+    if (movimento == 'a' && jogador_p.x > 1) { // Movimento à esquerda
         jogador_p.x--;
-    } else if (move == 'd' && jogador_p.x < MAX_tela_X - 2) {
+    } else if (movimento == 'd' && jogador_p.x < MAX_tela_X - 2) { // Movimento à direita
         jogador_p.x++;
-    } else if (move ==  ' ') {
-        disparos();
-    } else if (move == 'q') {
-        exit(0);
     }
-
-    imagem[jogador_p.y][jogador_p.x] = forma_jogador;
-    movimento_monstro();
+    
+    imagem[jogador_p.y][jogador_p.x] = forma_jogador;  // Desenha o jogador na nova posição
 }
 
 void colisao_com_monstro(){
@@ -689,18 +687,25 @@ void tiro_e_colisao() {
 
 // Função principal do jogo
 int main() {
-    struct termios old_tio;
-configuracao_terminal(&old_tio);
     srand(time(NULL));
     tela_inicial();
 
     while (vida>0) {
         limpar();
         tela();
-        mover();
+       if (kbhit()) { // Verifica se uma tecla foi pressionada
+            move = getch(); 
+            if (move == 'a' || move == 'd') {
+                move_jogador(move);
+            } else if (move == ' ') {
+                disparos(); // Dispara tiro
+            } else if(move=='q')
+            exit(0);
+        }
+
+        movimento_monstro();
         tiro_e_colisao();
-        usleep (ATRASO_TIQUE *10000000);
+        usleep (50000);
     }
-    restaurar_terminal(&old_tio);
     return 0;
 }
