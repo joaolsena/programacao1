@@ -277,7 +277,7 @@ void limpa_tela() {
 }
 
 void reinicia_jogo() {
-    limpa_tela(); // Limpa a tela
+    limpa_tela();                   
     ponto = 0;
     vida = 3;
     tempo_monstro = 0;
