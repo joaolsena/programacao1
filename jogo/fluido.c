@@ -23,7 +23,7 @@
 #define monstro_3 'W'
 #define monstro_4  'X'
 #define MAX_monstro 10 // Máximo de monstros por linha
-#define max_tiro_monstro 3
+#define max_tiro_monstro 2
 #define ATRASO_TIQUE 1
 
 //config barreiras
@@ -40,6 +40,7 @@ int vida = 3;
 int direcao = 1;
 int direcao2 = 1;
 int tempo_monstro = 0;
+int tempo = 0;
 int velocidade = 1;
 int velocidade1=0;
 int level = 1;
@@ -376,7 +377,7 @@ void disparos() {
 void gera_monstro_especial(){
      if (!monstro4.ativo) {
             // Gera um número aleatório para determinar se o monstro4 deve aparecer
-            int num = rand() % 60; 
+            int num = rand() % 80; 
             if (num == 0) { 
                 monstro4.ativo = 1;
                 if(direcao2 == 1){
@@ -388,6 +389,9 @@ void gera_monstro_especial(){
                 monstro4.y = 1; 
             }
      }
+     tempo++;
+     if(tempo>= 3){
+     tempo=0;
       if (monstro4.ativo) imagem[monstro4.y][monstro4.x] = ' '; 
       if (monstro4.ativo)  monstro4.x+= direcao2; 
       if (monstro4.ativo && (monstro4.x >= MAX_tela_X - 1 || monstro4.x <= 0)) {
@@ -396,6 +400,7 @@ void gera_monstro_especial(){
             } 
       if(monstro4.ativo) imagem[monstro4.y][monstro4.x] = monstro_4; 
 
+}
 }
 void limpa_posicao_monstros() {
     for (int i = 0; i < MAX_monstro * 2; i++) {
@@ -606,7 +611,7 @@ void tiro_monster() {
     for (int i = 0; i < max_tiro_monstro; i++) {
         if (!tiro_monstros[i].ativo) {
             // Seleciona aleatoriamente um monstro para disparar
-            int chance_tiro = rand() % (11 -(velocidade1*2));
+            int chance_tiro = rand() % (12 -(velocidade1*2));
             int monstro_atirador = rand () %MAX_monstro;
             if (chance_tiro==0 && monstro[monstro_atirador].ativo) {
                 tiro_monstros[i].ativo = 1;
@@ -705,7 +710,7 @@ int main() {
 
         movimento_monstro();
         tiro_e_colisao();
-        usleep (50000);
+        usleep (20000);
     }
     return 0;
 }

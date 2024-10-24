@@ -676,7 +676,7 @@ int main() {
         tela();
         mover();
         tiro_e_colisao();
-        usleep (50000);
+        usleep (10000);
     }
     return 0;
 }
