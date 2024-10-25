@@ -1,5 +1,5 @@
 // lista de coisas que faltam ser implementadas
-//  delei no tiro do monstro e fazer o monstro3 atirar. 
+// fazer o monstro3 atirar. 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -621,9 +621,10 @@ void tiro_monster() {
             }
         } else {
             tempo_tiro_monstro++;
-            if (tempo_tiro_monstro>3)
-            {
-               tempo_tiro_monstro = 0;
+
+        if (tempo_tiro_monstro > 2) {
+
+            tempo_tiro_monstro=0;
             
             // Movimento do tiro do monstro
             imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
@@ -633,8 +634,7 @@ void tiro_monster() {
             } else {
                 tiro_monstros[i].ativo = 0;
             }
-            }
-
+        }
             // Verifica se o tiro do monstro atingiu o jogador
             if (tiro_monstros[i].ativo && tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
                 vida--;
