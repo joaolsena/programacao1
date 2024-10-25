@@ -40,7 +40,8 @@ int vida = 3;
 int direcao = 1;
 int direcao2 = 1;
 int tempo_monstro = 0;
-int tempo = 0;
+int tempo_monstro_especial = 0;
+int tempo_tiro_monstro = 0;
 int velocidade = 1;
 int velocidade1=0;
 int level = 1;
@@ -389,9 +390,9 @@ void gera_monstro_especial(){
                 monstro4.y = 1; 
             }
      }
-     tempo++;
-     if(tempo>= 3){
-     tempo=0;
+      tempo_monstro_especial++;
+     if( tempo_monstro_especial>= 3){
+      tempo_monstro_especial=0;
       if (monstro4.ativo) imagem[monstro4.y][monstro4.x] = ' '; 
       if (monstro4.ativo)  monstro4.x+= direcao2; 
       if (monstro4.ativo && (monstro4.x >= MAX_tela_X - 1 || monstro4.x <= 0)) {
@@ -619,6 +620,11 @@ void tiro_monster() {
                 tiro_monstros[i].y = monstro[monstro_atirador].y + 1;
             }
         } else {
+            tempo_tiro_monstro++;
+            if (tempo_tiro_monstro>3)
+            {
+               tempo_tiro_monstro = 0;
+            
             // Movimento do tiro do monstro
             imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
             if (tiro_monstros[i].y < MAX_tela_y - 1) {
@@ -626,6 +632,7 @@ void tiro_monster() {
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro_monstro;
             } else {
                 tiro_monstros[i].ativo = 0;
+            }
             }
 
             // Verifica se o tiro do monstro atingiu o jogador
