@@ -520,42 +520,40 @@ if (tempo_monstro >= (16 -(velocidade + velocidade1))) {
         desenha_monstros_na_tela();
     }
 }
-// Função para mover o jogador e processar disparos
-// Adicione a função para mover o jogador
 void mover_jogador() {
-    int move = getch(); // Lê a entrada do jogador
+     move = getch(); 
+    imagem[jogador_p.y][jogador_p.x] = ' ';
     
     if (move == '\033') { // Início da sequência de escape para teclas de seta
         getch(); // Ignora o '['
         switch(getch()) { // Captura a direção
-            case 'D': // Seta para a direita
-                if (jogador_p.x < MAX_tela_X - 2) { // Evita sair da tela
-                    imagem[jogador_p.y][jogador_p.x] = ' '; // Limpa a posição atual
-                    jogador_p.x++; // Move para a direita
+            case 'C': // Seta para a direita
+                if (jogador_p.x < MAX_tela_X - 2) { 
+                    jogador_p.x++; 
                 }
                 break;
-            case 'C': // Seta para a esquerda
-                if (jogador_p.x > 1) { // Evita sair da tela
-                    imagem[jogador_p.y][jogador_p.x] = ' '; // Limpa a posição atual
-                    jogador_p.x--; // Move para a esquerda
+            case 'D': // Seta para a esquerda
+                if (jogador_p.x > 1) { 
+                    jogador_p.x--; 
                 }
                 break;
         }
-    } else if (move == 'd' || move == 'D') { // Tecla D
-        if (jogador_p.x < MAX_tela_X - 2) { // Evita sair da tela
-            imagem[jogador_p.y][jogador_p.x] = ' '; // Limpa a posição atual
-            jogador_p.x++; // Move para a direita
-        }
-    } else if (move == 'a' || move == 'A') { // Tecla A
-        if (jogador_p.x > 1) { // Evita sair da tela
-            imagem[jogador_p.y][jogador_p.x] = ' '; // Limpa a posição atual
-            jogador_p.x--; // Move para a esquerda
-        }
+    } else if (move == 'd' || move == 'D') { 
+        if ( jogador_p.x < MAX_tela_X - 2){
+            jogador_p.x++;
+        }    
+    } else if (move == 'a' || move == 'A') { 
+        if (jogador_p.x > 1){
+          jogador_p.x--;
+        }       
+    }else if (move == ' '){
+        disparos();
+    } else if (move == 'q') {
+        exit(0);
     }
 
-    imagem[jogador_p.y][jogador_p.x] = forma_jogador; // Desenha o jogador na nova posição
+    imagem[jogador_p.y][jogador_p.x] = forma_jogador; 
 }
-
 
 void colisao_com_monstro(){
 
@@ -730,13 +728,7 @@ int main() {
         limpar();
         tela();
        if (kbhit()) { // Verifica se uma tecla foi pressionada
-            move = getch(); 
-            if (move == 'a' || move == 'd') {
-                move_jogador(move);
-            } else if (move == ' ') {
-                disparos(); // Dispara tiro
-            } else if(move=='q')
-            exit(0);
+           mover_jogador();
         }
 
         movimento_monstro();
