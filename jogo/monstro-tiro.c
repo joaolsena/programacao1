@@ -96,10 +96,10 @@ void inicia_monstros() {
         monstro[i].y = MAX_tela_y / 2;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
 
-        monstro[i].ativo = 1;
-        monstro[i].x = posicao + (2 * i);
-        monstro[i].y = (MAX_tela_y / 2)+1;
-        imagem[monstro[i].y][monstro[i].x] = monstro_1;
+        monstro[i+ MAX_monstro].ativo = 1;
+        monstro[i+ MAX_monstro].x = posicao + (2 * i);
+        monstro[i+ MAX_monstro].y = (MAX_tela_y / 2)+1;
+        imagem[monstro[i+ MAX_monstro].y][monstro[i+ MAX_monstro].x] = monstro_1;
     }
 }
 
@@ -126,8 +126,6 @@ void movimento_monstro() {
          
     }
     
-
-
 void disparos() {
     for (int i = 0; i < max_tiros; i++) {
         if (!tiro[i].ativo) {

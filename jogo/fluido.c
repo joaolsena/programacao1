@@ -522,15 +522,15 @@ if (tempo_monstro >= (16 -(velocidade + velocidade1))) {
 }
 // Função para mover o jogador e processar disparos
 void move_jogador(char movimento) {
-    imagem[jogador_p.y][jogador_p.x] = ' ';  // Apaga a posição anterior
+    imagem[jogador_p.y][jogador_p.x] = ' ';  
     
-    if (movimento == 'a' && jogador_p.x > 1) { // Movimento à esquerda
+    if (movimento == 'a' && jogador_p.x > 1) { 
         jogador_p.x--;
-    } else if (movimento == 'd' && jogador_p.x < MAX_tela_X - 2) { // Movimento à direita
+    } else if (movimento == 'd' && jogador_p.x < MAX_tela_X - 2) { 
         jogador_p.x++;
     }
     
-    imagem[jogador_p.y][jogador_p.x] = forma_jogador;  // Desenha o jogador na nova posição
+    imagem[jogador_p.y][jogador_p.x] = forma_jogador;  
 }
 
 void colisao_com_monstro(){
