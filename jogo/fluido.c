@@ -622,7 +622,7 @@ void tiro_monster() {
         } else {
             tempo_tiro_monstro++;
 
-        if (tempo_tiro_monstro > 2) {
+        if (tempo_tiro_monstro > 4) {
 
             tempo_tiro_monstro=0;
             
