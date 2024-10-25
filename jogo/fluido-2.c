@@ -730,7 +730,6 @@ int main() {
        if (kbhit()) { // Verifica se uma tecla foi pressionada
            mover_jogador();
         }
-
         movimento_monstro();
         tiro_e_colisao();
         usleep (20000);
