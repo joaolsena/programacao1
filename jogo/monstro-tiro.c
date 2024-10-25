@@ -95,25 +95,30 @@ void inicia_monstros() {
         monstro[i].x = posicao + (2 * i);
         monstro[i].y = MAX_tela_y / 2;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
+
+        monstro[i].ativo = 1;
+        monstro[i].x = posicao + (2 * i);
+        monstro[i].y = (MAX_tela_y / 2)+1;
+        imagem[monstro[i].y][monstro[i].x] = monstro_1;
     }
 }
 
 int direcao = 1;
 void movimento_monstro() {
-    for (int i = 0; i < MAX_monstro; i++) {
+    for (int i = 0; i < MAX_monstro * 2; i++) {
         if (monstro[i].ativo) {
             imagem[monstro[i].y][monstro[i].x] = ' ';
             monstro[i].x += direcao;
         }
     }
 
-    for (int i = 0; i < MAX_monstro; i++) {
+    for (int i = 0; i < MAX_monstro*2; i++) {
         if (monstro[i].ativo && (monstro[i].x >= MAX_tela_X - 1 || monstro[i].x <= 0)) {
             direcao *= -1;
         }
     }
 
-    for (int i = 0; i < MAX_monstro; i++) {
+    for (int i = 0; i < MAX_monstro*2; i++) {
         if (monstro[i].ativo) {
             imagem[monstro[i].y][monstro[i].x] = monstro_1;
         }
@@ -200,7 +205,7 @@ void tiro_monster() {
             }
 
             // Verifica se o tiro do monstro atingiu o jogador
-            if (tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
+            if (tiro_monstros[i].ativo && tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
                 vida--;
                 tiro_monstros[i].ativo = 0;
                 if (vida <= 0) {
