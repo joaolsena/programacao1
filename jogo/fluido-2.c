@@ -14,7 +14,7 @@
 #define MAX_margem 30
 
 // Configurações de jogo
-#define forma_jogador 'A'
+#define forma_jogador '^'
 #define forma_tiro '|'
 #define forma_tiro_monstro '!'
 #define max_tiros 2
@@ -23,7 +23,7 @@
 #define monstro_3 'W'
 #define monstro_4  'X'
 #define MAX_monstro 10 // Máximo de monstros por linha
-#define max_tiro_monstro 2
+#define max_tiro_monstro 3
 #define ATRASO_TIQUE 1
 
 //config barreiras
@@ -634,7 +634,7 @@ void tiro_monster() {
     for (int i = 0; i < max_tiro_monstro; i++) {
         if (!tiro_monstros[i].ativo) {
             // Seleciona aleatoriamente um monstro para disparar
-            int chance_tiro = rand() % (12 -(velocidade1*2));
+            int chance_tiro = rand() % (11 -(velocidade1*2));
             int monstro_atirador = rand () %MAX_monstro;
             if (chance_tiro==0 && monstro[monstro_atirador].ativo) {
                 tiro_monstros[i].ativo = 1;
@@ -696,7 +696,6 @@ void tiro_monster() {
     
 }
 
-
 // Função para mover os tiros e verificar colisão com monstros
 void tiro_e_colisao() {
     tiro_monster();
@@ -732,7 +731,7 @@ int main() {
         }
         movimento_monstro();
         tiro_e_colisao();
-        usleep (20000);
+        usleep (40000);
     }
     return 0;
 }
