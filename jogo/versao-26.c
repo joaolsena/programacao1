@@ -24,7 +24,7 @@
 #define monstro_4  'X'
 #define MAX_monstro 10 // Máximo de monstros por linha
 #define max_tiro_monstro 3
-#define ATRASO_TIQUE 1
+#define ATRASO_TIQUE 40000
 
 //config barreiras
 #define barreira_forma_1 '#'
@@ -32,7 +32,7 @@
 #define barreira_forma_3 '-'
 #define max_barreira 49
 #define max_grupo 4
-#define max_barreiras_por_grupo 6 
+#define max_barreiras_por_grupo 8
 #define  max_espaco_grupo 4
 
 int ponto = 0;
@@ -731,7 +731,7 @@ int main() {
         }
         movimento_monstro();
         tiro_e_colisao();
-        usleep (40000);
+        usleep (ATRASO_TIQUE);
     }
     return 0;
 }
