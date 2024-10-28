@@ -9,8 +9,8 @@
 #include <fcntl.h>
 
 // Configurações de tela 
-#define MAX_tela_X 50
-#define MAX_tela_y 15
+#define MAX_tela_X 50  
+#define MAX_tela_y 16
 #define MAX_margem 30
 
 // Configurações de jogo
@@ -224,28 +224,28 @@ void inicia_monstros() {
         
         monstro[i].ativo = 1;
         monstro[i].x = 2 + (2 * i);
-        monstro[i].y = (MAX_tela_y / 2) -1;
+        monstro[i].y = 6;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
 
         monstro[i + MAX_monstro].ativo = 1;
         monstro[i + MAX_monstro].x = 2 + (2 * i);
-        monstro[i + MAX_monstro].y = (MAX_tela_y / 2) - 2;
+        monstro[i + MAX_monstro].y = 5;
         imagem[monstro[i + MAX_monstro].y][monstro[i + MAX_monstro].x] = monstro_1;
 
         
         monstro2[i].ativo = 1;
         monstro2[i].x = 2 + (2 * i);
-        monstro2[i].y = (MAX_tela_y / 2) - 3;
+        monstro2[i].y = 4;
         imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
 
         monstro2[i+MAX_monstro].ativo = 1;
         monstro2[i+MAX_monstro].x = 2 + (2 * i);
-        monstro2[i+ MAX_monstro].y = (MAX_tela_y / 2) - 4;
+        monstro2[i+ MAX_monstro].y = 3;
         imagem[monstro2[i + MAX_monstro].y][monstro2[i + MAX_monstro].x] = monstro_2;
 
         monstro3[i].ativo = 1;
         monstro3[i].x = 2 + (2 * i);
-        monstro3[i].y = (MAX_tela_y / 2) - 5;
+        monstro3[i].y = 2;
         imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
 
     }
