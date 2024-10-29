@@ -389,6 +389,7 @@ void gera_monstro_especial(){
             int num = rand() % 80; 
             if (num == 0) { 
                 monstro4.ativo = 1;
+                 tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/ufo_lowpitch.wav");
                 if(direcao2 == 1){
                 monstro4.x = 1;
                  }
@@ -401,7 +402,7 @@ void gera_monstro_especial(){
       tempo_monstro_especial++;
      if( tempo_monstro_especial>= 3){
       tempo_monstro_especial=0;
-      if (monstro4.ativo) imagem[monstro4.y][monstro4.x] = ' '; 
+      if (monstro4.ativo) imagem[monstro4.y][monstro4.x] = ' ';
       if (monstro4.ativo)  monstro4.x+= direcao2; 
       if (monstro4.ativo && (monstro4.x >= MAX_tela_X - 1 || monstro4.x <= 0)) {
                 monstro4.ativo = 0; 
@@ -573,6 +574,7 @@ for (int i = 0; i < max_tiros; i++) {
                     monstro[j].ativo = 0;
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
+                     tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
                     break; 
                 }
             }
@@ -584,6 +586,7 @@ for (int i = 0; i < max_tiros; i++) {
                     monstro2[j].ativo = 0;
                     imagem[monstro2[j].y][monstro2[j].x] = ' ';
                     tiro[i].ativo = 0;
+                     tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
                     break; 
                 }
             }
@@ -593,6 +596,7 @@ for (int i = 0; i < max_tiros; i++) {
                     monstro3[j].ativo = 0;
                     imagem[monstro3[j].y][monstro3[j].x] = ' ';
                     tiro[i].ativo = 0;
+                     tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
                     break; 
                 }
             }
@@ -602,6 +606,7 @@ for (int i = 0; i < max_tiros; i++) {
                 monstro4.ativo=0;
                 imagem[monstro4.y] [monstro4.x] = ' ';
                 tiro[i].ativo = 0;
+                 tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
                 break;
             }
         }
@@ -683,6 +688,7 @@ void tiro_monster() {
                 vida--;
                 tiro_monstros[i].ativo = 0;
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+                tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
                 if (vida == 0) {
                     tela_game_over();
                 }

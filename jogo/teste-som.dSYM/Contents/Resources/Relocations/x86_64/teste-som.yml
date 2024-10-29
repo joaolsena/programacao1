@@ -1,0 +1,58 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     '/Users/user01/Documents/GitHub/programacao1/jogo/teste-som'
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _kbhit, symObjAddr: 0x0, symBinAddr: 0x100000E30, symSize: 0x130 }
+  - { offset: 0x3F, size: 0x8, addend: 0x0, symName: _ponto, symObjAddr: 0x6940, symBinAddr: 0x100005020, symSize: 0x0 }
+  - { offset: 0x5B, size: 0x8, addend: 0x0, symName: _vida, symObjAddr: 0x2DF0, symBinAddr: 0x100005000, symSize: 0x0 }
+  - { offset: 0x70, size: 0x8, addend: 0x0, symName: _direcao, symObjAddr: 0x2DF4, symBinAddr: 0x100005004, symSize: 0x0 }
+  - { offset: 0x85, size: 0x8, addend: 0x0, symName: _direcao2, symObjAddr: 0x2DF8, symBinAddr: 0x100005008, symSize: 0x0 }
+  - { offset: 0x9A, size: 0x8, addend: 0x0, symName: _tempo_monstro, symObjAddr: 0x6944, symBinAddr: 0x100005024, symSize: 0x0 }
+  - { offset: 0xAF, size: 0x8, addend: 0x0, symName: _tempo_monstro_especial, symObjAddr: 0x6948, symBinAddr: 0x100005028, symSize: 0x0 }
+  - { offset: 0xC4, size: 0x8, addend: 0x0, symName: _tempo_tiro_monstro, symObjAddr: 0x694C, symBinAddr: 0x10000502C, symSize: 0x0 }
+  - { offset: 0xD9, size: 0x8, addend: 0x0, symName: _velocidade, symObjAddr: 0x2DFC, symBinAddr: 0x10000500C, symSize: 0x0 }
+  - { offset: 0xEE, size: 0x8, addend: 0x0, symName: _velocidade1, symObjAddr: 0x6950, symBinAddr: 0x100005030, symSize: 0x0 }
+  - { offset: 0x103, size: 0x8, addend: 0x0, symName: _level, symObjAddr: 0x2E00, symBinAddr: 0x100005010, symSize: 0x0 }
+  - { offset: 0x118, size: 0x8, addend: 0x0, symName: _pontuacao_maxima, symObjAddr: 0x6954, symBinAddr: 0x100005034, symSize: 0x0 }
+  - { offset: 0x12D, size: 0x8, addend: 0x0, symName: _imagem, symObjAddr: 0x6960, symBinAddr: 0x100005040, symSize: 0x0 }
+  - { offset: 0x162, size: 0x8, addend: 0x0, symName: _tiro, symObjAddr: 0x6C80, symBinAddr: 0x100005360, symSize: 0x0 }
+  - { offset: 0x1B7, size: 0x8, addend: 0x0, symName: _monstro, symObjAddr: 0x6CA0, symBinAddr: 0x100005380, symSize: 0x0 }
+  - { offset: 0x20C, size: 0x8, addend: 0x0, symName: _monstro2, symObjAddr: 0x6D90, symBinAddr: 0x100005470, symSize: 0x0 }
+  - { offset: 0x261, size: 0x8, addend: 0x0, symName: _monstro3, symObjAddr: 0x6E80, symBinAddr: 0x100005560, symSize: 0x0 }
+  - { offset: 0x2B6, size: 0x8, addend: 0x0, symName: _monstro4, symObjAddr: 0x6EF8, symBinAddr: 0x1000055D8, symSize: 0x0 }
+  - { offset: 0x2FF, size: 0x8, addend: 0x0, symName: _tiro_monstros, symObjAddr: 0x6F10, symBinAddr: 0x1000055F0, symSize: 0x0 }
+  - { offset: 0x354, size: 0x8, addend: 0x0, symName: _barreiras, symObjAddr: 0x6F40, symBinAddr: 0x100005620, symSize: 0x0 }
+  - { offset: 0x3B5, size: 0x8, addend: 0x0, symName: _contador, symBinAddr: 0x100005930, symSize: 0x0 }
+  - { offset: 0x3CA, size: 0x8, addend: 0x0, symName: _move, symBinAddr: 0x100005940, symSize: 0x0 }
+  - { offset: 0x3DF, size: 0x8, addend: 0x0, symName: _fim, symBinAddr: 0x100005934, symSize: 0x0 }
+  - { offset: 0x3F4, size: 0x8, addend: 0x0, symName: _opcao, symBinAddr: 0x100005941, symSize: 0x0 }
+  - { offset: 0x409, size: 0x8, addend: 0x0, symName: _jogador_p, symBinAddr: 0x100005938, symSize: 0x0 }
+  - { offset: 0x43A, size: 0x8, addend: 0x0, symName: _kbhit, symObjAddr: 0x0, symBinAddr: 0x100000E30, symSize: 0x130 }
+  - { offset: 0x490, size: 0x8, addend: 0x0, symName: _getch, symObjAddr: 0x130, symBinAddr: 0x100000F60, symSize: 0xB0 }
+  - { offset: 0x4D7, size: 0x8, addend: 0x0, symName: _tocar_som, symObjAddr: 0x1E0, symBinAddr: 0x100001010, symSize: 0x70 }
+  - { offset: 0x50B, size: 0x8, addend: 0x0, symName: _limpar, symObjAddr: 0x250, symBinAddr: 0x100001080, symSize: 0x20 }
+  - { offset: 0x520, size: 0x8, addend: 0x0, symName: _tela, symObjAddr: 0x270, symBinAddr: 0x1000010A0, symSize: 0x3F0 }
+  - { offset: 0x58A, size: 0x8, addend: 0x0, symName: _inicia_jogador, symObjAddr: 0x660, symBinAddr: 0x100001490, symSize: 0x50 }
+  - { offset: 0x59F, size: 0x8, addend: 0x0, symName: _inicia_monstros, symObjAddr: 0x6B0, symBinAddr: 0x1000014E0, symSize: 0x320 }
+  - { offset: 0x5D1, size: 0x8, addend: 0x0, symName: _inicia_barreira, symObjAddr: 0x9D0, symBinAddr: 0x100001800, symSize: 0x110 }
+  - { offset: 0x640, size: 0x8, addend: 0x0, symName: _configuracoes_iniciais, symObjAddr: 0xAE0, symBinAddr: 0x100001910, symSize: 0x20 }
+  - { offset: 0x656, size: 0x8, addend: 0x0, symName: _tela_inicial, symObjAddr: 0xB00, symBinAddr: 0x100001930, symSize: 0x150 }
+  - { offset: 0x66C, size: 0x8, addend: 0x0, symName: _limpa_tela, symObjAddr: 0xC50, symBinAddr: 0x100001A80, symSize: 0x70 }
+  - { offset: 0x6BD, size: 0x8, addend: 0x0, symName: _reinicia_jogo, symObjAddr: 0xCC0, symBinAddr: 0x100001AF0, symSize: 0x1A0 }
+  - { offset: 0x748, size: 0x8, addend: 0x0, symName: _tela_game_over, symObjAddr: 0xE60, symBinAddr: 0x100001C90, symSize: 0x1A0 }
+  - { offset: 0x75E, size: 0x8, addend: 0x0, symName: _disparos, symObjAddr: 0x1000, symBinAddr: 0x100001E30, symSize: 0x100 }
+  - { offset: 0x792, size: 0x8, addend: 0x0, symName: _gera_monstro_especial, symObjAddr: 0x1100, symBinAddr: 0x100001F30, symSize: 0x170 }
+  - { offset: 0x7C6, size: 0x8, addend: 0x0, symName: _limpa_posicao_monstros, symObjAddr: 0x1270, symBinAddr: 0x1000020A0, symSize: 0x140 }
+  - { offset: 0x7FA, size: 0x8, addend: 0x0, symName: _atualiza_posicao_monstros, symObjAddr: 0x13B0, symBinAddr: 0x1000021E0, symSize: 0xE0 }
+  - { offset: 0x82E, size: 0x8, addend: 0x0, symName: _desce_linha_monstros, symObjAddr: 0x1490, symBinAddr: 0x1000022C0, symSize: 0x170 }
+  - { offset: 0x862, size: 0x8, addend: 0x0, symName: _desenha_monstros_na_tela, symObjAddr: 0x1600, symBinAddr: 0x100002430, symSize: 0x140 }
+  - { offset: 0x896, size: 0x8, addend: 0x0, symName: _verifica_bordas_e_atualiza_direcao, symObjAddr: 0x1740, symBinAddr: 0x100002570, symSize: 0x180 }
+  - { offset: 0x8D9, size: 0x8, addend: 0x0, symName: _velocidade_monstro, symObjAddr: 0x18C0, symBinAddr: 0x1000026F0, symSize: 0x220 }
+  - { offset: 0x956, size: 0x8, addend: 0x0, symName: _movimento_monstro, symObjAddr: 0x1AE0, symBinAddr: 0x100002910, symSize: 0x60 }
+  - { offset: 0x96C, size: 0x8, addend: 0x0, symName: _mover_jogador, symObjAddr: 0x1B40, symBinAddr: 0x100002970, symSize: 0x200 }
+  - { offset: 0x982, size: 0x8, addend: 0x0, symName: _colisao_com_monstro, symObjAddr: 0x1D40, symBinAddr: 0x100002B70, symSize: 0x4C0 }
+  - { offset: 0xA2A, size: 0x8, addend: 0x0, symName: _colisao_com_barreiras, symObjAddr: 0x2200, symBinAddr: 0x100003030, symSize: 0x2E0 }
+  - { offset: 0xA7B, size: 0x8, addend: 0x0, symName: _tiro_monster, symObjAddr: 0x24E0, symBinAddr: 0x100003310, symSize: 0x740 }
+  - { offset: 0xB41, size: 0x8, addend: 0x0, symName: _tiro_e_colisao, symObjAddr: 0x2C20, symBinAddr: 0x100003A50, symSize: 0x160 }
+  - { offset: 0xB75, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x2D80, symBinAddr: 0x100003BB0, symSize: 0x6F }
+...
