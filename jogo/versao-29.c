@@ -446,9 +446,9 @@ void desenha_monstros_na_tela() {
 void verifica_bordas_e_atualiza_direcao() {
     int borda=0;
     for (int i = 0; i < MAX_monstro * 2; i++) {
-        if (monstro[i].ativo && (monstro[i].x <= 1 || monstro[i].x >= MAX_tela_X - 2) ||
-            monstro2[i].ativo && (monstro2[i].x <= 1 || monstro2[i].x >= MAX_tela_X - 2) ||
-            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x <= 1 || monstro3[i].x >= MAX_tela_X - 2)) {
+        if (monstro[i].ativo && (monstro[i].x == 1 || monstro[i].x == MAX_tela_X - 2) ||
+            monstro2[i].ativo && (monstro2[i].x == 1 || monstro2[i].x == MAX_tela_X - 2) ||
+            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x == 1 || monstro3[i].x == MAX_tela_X - 2)) {
             borda=1;
             velocidade++; 
             break;  
@@ -460,6 +460,7 @@ void verifica_bordas_e_atualiza_direcao() {
             desce_linha_monstros();     
     }
 }
+
 void velocidade_monstro(){
     int monstros_ativos = 0;
      // Contagem de monstros do tipo 1 e 2
