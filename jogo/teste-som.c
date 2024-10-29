@@ -616,6 +616,38 @@ for (int i = 0; i < max_tiros; i++) {
         pontuacao_maxima=ponto;
     }
 }
+
+void atualizar_resistencia_barreira(){
+    for (int j = 0; j < max_barreira; j++) {
+        if (barreiras[j].ativo) {
+            int monstro_na_posicao = 0;
+            for (int k = 0; k < MAX_monstro; k++) {
+                if ((monstro[k].ativo && monstro[k].x == barreiras[j].x && monstro[k].y == barreiras[j].y) ||
+                    (monstro2[k].ativo && monstro2[k].x == barreiras[j].x && monstro2[k].y == barreiras[j].y) ||
+                    (monstro3[k].ativo && monstro3[k].x == barreiras[j].x && monstro3[k].y == barreiras[j].y)) {
+                    monstro_na_posicao = 1;
+                    break;
+                }
+            }
+            if (!monstro_na_posicao) {
+                // Atualiza a aparência da barreira apenas se não houver monstro
+                if (barreiras[j].resistencia > 7) {
+                    imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_1;
+                } else if (barreiras[j].resistencia > 3) {
+                    imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_2;
+                } else if (barreiras[j].resistencia > 0) {
+                    imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_3;
+                } else {
+                    imagem[barreiras[j].y][barreiras[j].x] = ' ';
+                    barreiras[j].ativo = 0;
+                }
+            } else {
+                imagem[barreiras[j].y][barreiras[j].x] = ' ';  // Monstro aparece na barreira
+            }
+        }
+    }
+}
+
 void colisao_com_barreiras() {
     for (int i = 0; i < max_tiros; i++) {
         if (tiro[i].ativo) {
@@ -627,20 +659,12 @@ void colisao_com_barreiras() {
                     barreiras[j].resistencia--;
                     tiro[i].ativo = 0;
                     imagem[tiro[i].y][tiro[i].x] = ' ';
-                    if ( barreiras[j].resistencia>7){
-                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_1;
-                    } else if (barreiras[j].resistencia>3 ) {
-                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_2;
-                    } else if (barreiras[j].resistencia>0) {
-                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_3;
-                    } else  {
-                        imagem[barreiras[j].y][barreiras[j].x] = ' ';
-                        barreiras[j].ativo = 0;
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
+                    atualizar_resistencia_barreira();
                     }
-                }
-            }
         }
-    }
+    } 
+}
 }
 void tiro_monster() {
     
@@ -703,24 +727,15 @@ void tiro_monster() {
                     barreiras[j].resistencia--;
                     tiro_monstros[i].ativo = 0;
                     imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-                    if ( barreiras[j].resistencia>7){
-                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_1;
-                    } else if (barreiras[j].resistencia>3 ) {
-                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_2;
-                    } else if (barreiras[j].resistencia>0) {
-                        imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_3;
-                    } else  {
-                        imagem[barreiras[j].y][barreiras[j].x] = ' ';
-                        barreiras[j].ativo = 0;
-                    }
-                
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
+                    
             }
-            
-            
+                   atualizar_resistencia_barreira();
         }
     }
 }   
 }
+
 // Função para mover os tiros e verificar colisão com monstros
 void tiro_e_colisao() {
     tiro_monster();
@@ -728,13 +743,13 @@ void tiro_e_colisao() {
         if (tiro[i].ativo) {
             imagem[tiro[i].y][tiro[i].x] = ' ';
             tiro[i].y--;
-            
+
             if (tiro[i].y < 0) {
                 tiro[i].ativo = 0;
             } else {
                 colisao_com_monstro();
                 colisao_com_barreiras();
-                
+
                 if (tiro[i].ativo) {
                     imagem[tiro[i].y][tiro[i].x] = forma_tiro;
                 }
@@ -747,16 +762,14 @@ void tiro_e_colisao() {
 int main() {
     srand(time(NULL));
     tela_inicial();
-    while (vida>0) {
+
+    while (vida > 0) {
         limpar();
         tela();
-       if (kbhit()) { // Verifica se uma tecla foi pressionada
-           mover_jogador();
-        }
+        if (kbhit()) mover_jogador();
         movimento_monstro();
         tiro_e_colisao();
-        usleep (ATRASO_TIQUE);
+        usleep(ATRASO_TIQUE);
     }
     return 0;
 }
-
