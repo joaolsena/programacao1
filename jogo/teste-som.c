@@ -341,6 +341,7 @@ void reinicia_jogo() {
 
 
 void tela_game_over() {
+     tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/videogame-death-sound-43894.mp3");
     do
     {
     limpar();
