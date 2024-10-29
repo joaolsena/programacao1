@@ -692,8 +692,7 @@ void tiro_monster() {
             
         }
     }
-}
-    
+}   
 }
 
 // Função para mover os tiros e verificar colisão com monstros

@@ -1,0 +1,29 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     '/Users/user01/Documents/GitHub/programacao1/jogo/monstro-tiro'
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _limpar, symObjAddr: 0x0, symBinAddr: 0x1000010D0, symSize: 0x20 }
+  - { offset: 0x3F, size: 0x8, addend: 0x0, symName: _ponto, symObjAddr: 0x2480, symBinAddr: 0x100003010, symSize: 0x0 }
+  - { offset: 0x5B, size: 0x8, addend: 0x0, symName: _vida, symObjAddr: 0xE5C, symBinAddr: 0x100003000, symSize: 0x0 }
+  - { offset: 0x70, size: 0x8, addend: 0x0, symName: _direcao, symObjAddr: 0xE60, symBinAddr: 0x100003004, symSize: 0x0 }
+  - { offset: 0x85, size: 0x8, addend: 0x0, symName: _tempo_monstro, symObjAddr: 0x2484, symBinAddr: 0x100003014, symSize: 0x0 }
+  - { offset: 0x9A, size: 0x8, addend: 0x0, symName: _velocidade, symObjAddr: 0xE64, symBinAddr: 0x100003008, symSize: 0x0 }
+  - { offset: 0xAF, size: 0x8, addend: 0x0, symName: _velocidade1, symObjAddr: 0x2488, symBinAddr: 0x100003018, symSize: 0x0 }
+  - { offset: 0xC4, size: 0x8, addend: 0x0, symName: _tempo_tiro_monstro, symObjAddr: 0x248C, symBinAddr: 0x10000301C, symSize: 0x0 }
+  - { offset: 0xD9, size: 0x8, addend: 0x0, symName: _posicao, symObjAddr: 0xE68, symBinAddr: 0x10000300C, symSize: 0x0 }
+  - { offset: 0xEE, size: 0x8, addend: 0x0, symName: _imagem, symObjAddr: 0x2490, symBinAddr: 0x100003020, symSize: 0x0 }
+  - { offset: 0x123, size: 0x8, addend: 0x0, symName: _tiro, symObjAddr: 0x2880, symBinAddr: 0x100003410, symSize: 0x0 }
+  - { offset: 0x178, size: 0x8, addend: 0x0, symName: _tiro_monstros, symObjAddr: 0x28A0, symBinAddr: 0x100003430, symSize: 0x0 }
+  - { offset: 0x1CD, size: 0x8, addend: 0x0, symName: _monstro, symObjAddr: 0x28D0, symBinAddr: 0x100003460, symSize: 0x0 }
+  - { offset: 0x222, size: 0x8, addend: 0x0, symName: _jogador_p, symBinAddr: 0x100003550, symSize: 0x0 }
+  - { offset: 0x253, size: 0x8, addend: 0x0, symName: _limpar, symObjAddr: 0x0, symBinAddr: 0x1000010D0, symSize: 0x20 }
+  - { offset: 0x268, size: 0x8, addend: 0x0, symName: _tela, symObjAddr: 0x20, symBinAddr: 0x1000010F0, symSize: 0x200 }
+  - { offset: 0x2D2, size: 0x8, addend: 0x0, symName: _jogador, symObjAddr: 0x220, symBinAddr: 0x1000012F0, symSize: 0x50 }
+  - { offset: 0x2E7, size: 0x8, addend: 0x0, symName: _inicia_monstros, symObjAddr: 0x270, symBinAddr: 0x100001340, symSize: 0x170 }
+  - { offset: 0x335, size: 0x8, addend: 0x0, symName: _disparos, symObjAddr: 0x3E0, symBinAddr: 0x1000014B0, symSize: 0xE0 }
+  - { offset: 0x367, size: 0x8, addend: 0x0, symName: _mover, symObjAddr: 0x4C0, symBinAddr: 0x100001590, symSize: 0x120 }
+  - { offset: 0x38B, size: 0x8, addend: 0x0, symName: _mover_tiro, symObjAddr: 0x5E0, symBinAddr: 0x1000016B0, symSize: 0x240 }
+  - { offset: 0x3D9, size: 0x8, addend: 0x0, symName: _movimento_monstro, symObjAddr: 0x820, symBinAddr: 0x1000018F0, symSize: 0x2F0 }
+  - { offset: 0x47B, size: 0x8, addend: 0x0, symName: _tiro_monster, symObjAddr: 0xB10, symBinAddr: 0x100001BE0, symSize: 0x300 }
+  - { offset: 0x4D7, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0xE10, symBinAddr: 0x100001EE0, symSize: 0x4C }
+...
