@@ -230,28 +230,28 @@ void inicia_monstros() {
     for (int i = 0; i < MAX_monstro; i++) {
         
         monstro[i].ativo = 1;
-        monstro[i].x = 2 + (2 * i);
+        monstro[i].x = 1 + (2 * i);
         monstro[i].y = 6;
         imagem[monstro[i].y][monstro[i].x] = monstro_1;
 
         monstro[i + MAX_monstro].ativo = 1;
-        monstro[i + MAX_monstro].x = 2 + (2 * i);
+        monstro[i + MAX_monstro].x = 1 + (2 * i);
         monstro[i + MAX_monstro].y = 5;
         imagem[monstro[i + MAX_monstro].y][monstro[i + MAX_monstro].x] = monstro_1;
 
         
         monstro2[i].ativo = 1;
-        monstro2[i].x = 2 + (2 * i);
+        monstro2[i].x = 1 + (2 * i);
         monstro2[i].y = 4;
         imagem[monstro2[i].y][monstro2[i].x] = monstro_2;
 
         monstro2[i+MAX_monstro].ativo = 1;
-        monstro2[i+MAX_monstro].x = 2 + (2 * i);
+        monstro2[i+MAX_monstro].x = 1 + (2 * i);
         monstro2[i+ MAX_monstro].y = 3;
         imagem[monstro2[i + MAX_monstro].y][monstro2[i + MAX_monstro].x] = monstro_2;
 
         monstro3[i].ativo = 1;
-        monstro3[i].x = 2 + (2 * i);
+        monstro3[i].x = 1 + (2 * i);
         monstro3[i].y = 2;
         imagem[monstro3[i].y][monstro3[i].x] = monstro_3;
 
