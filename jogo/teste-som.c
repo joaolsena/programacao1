@@ -644,10 +644,10 @@ void tiro_monster() {
             // Seleciona aleatoriamente um monstro para disparar
             int chance_tiro = rand() % (11 -(velocidade1*2));
             int monstro_atirador = rand () %MAX_monstro;
-            if (chance_tiro==0 && monstro[monstro_atirador].ativo) {
+            if (chance_tiro==0 && monstro3[monstro_atirador].ativo) {
                 tiro_monstros[i].ativo = 1;
-                tiro_monstros[i].x = monstro[monstro_atirador].x;
-                tiro_monstros[i].y = monstro[monstro_atirador].y + 1;
+                tiro_monstros[i].x = monstro3[monstro_atirador].x;
+                tiro_monstros[i].y = monstro3[monstro_atirador].y + 1;
             }
         } else {
             tempo_tiro_monstro++;
@@ -656,15 +656,28 @@ void tiro_monster() {
 
             tempo_tiro_monstro=0;
             
-            // Movimento do tiro do monstro
-            imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-            if (tiro_monstros[i].y < MAX_tela_y - 1) {
-                tiro_monstros[i].y++;
-                imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro_monstro;
-            } else {
-                tiro_monstros[i].ativo = 0;
+                if (imagem[tiro_monstros[i].y][tiro_monstros[i].x] == forma_tiro_monstro) {
+                    imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+                }
+                    int proxima_y = tiro_monstros[i].y + 1;
+                    int monstro_na_proxima_posicao = 0;
+                    for (int j = 0; j < MAX_monstro * 2; j++) {
+                        if (monstro[j].ativo && monstro[j].x == tiro_monstros[i].x && monstro[j].y == proxima_y || monstro2[j].ativo && monstro2[j].x == tiro_monstros[i].x && monstro2[j].y == proxima_y ) {
+                            monstro_na_proxima_posicao = 1;
+                            break;
+                        }
+                    }
+
+                    if (proxima_y < MAX_tela_y - 1 && !monstro_na_proxima_posicao) {
+                    tiro_monstros[i].y++; // Move o tiro para baixo
+                    imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro_monstro;
+                } else if (monstro_na_proxima_posicao) {
+                    tiro_monstros[i].y++; // Move o tiro para baixo sem desenhá-lo na posição do monstro
+                } else {
+                    tiro_monstros[i].ativo = 0; // Desativa o tiro ao chegar no limite inferior
+                }
+            
             }
-        }
             // Verifica se o tiro do monstro atingiu o jogador
             if (tiro_monstros[i].ativo && tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
                 vida--;
@@ -700,10 +713,8 @@ void tiro_monster() {
             
         }
     }
+}   
 }
-    
-}
-
 // Função para mover os tiros e verificar colisão com monstros
 void tiro_e_colisao() {
     tiro_monster();
