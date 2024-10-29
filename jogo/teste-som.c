@@ -1,5 +1,5 @@
-// lista de coisas que faltam ser implementadas
-// fazer o monstro3 atirar. 
+// lista de coisas que faltam ser implementadas:
+// fazer as barreiras reaparecerem dps do monstro passar por elas 
 
 #include <stdio.h>
 #include <stdlib.h>
