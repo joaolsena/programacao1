@@ -11,12 +11,12 @@
 #define forma_jogador '^'
 #define forma_tiro '|'
 #define forma_tiro_monstro '!'
-#define max_tiros 2
+#define max_tiros 20
 #define monstro_1 'M'
 #define monstro_2 'H'
 #define monstro_3 'W'
 #define MAX_monstro 10 // Máximo de monstros por linha
-#define max_tiro_monstro 3
+#define max_tiro_monstro 10
 
 
 // Variáveis globais
@@ -224,47 +224,66 @@ void movimento_monstro() {
     }
 }
 void tiro_monster() {
-    
     for (int i = 0; i < max_tiro_monstro; i++) {
         if (!tiro_monstros[i].ativo) {
             // Seleciona aleatoriamente um monstro para disparar
-            int chance_tiro = rand() % (11 -(velocidade1*2));
-            int monstro_atirador = rand () %MAX_monstro;
-            if (chance_tiro==0 && monstro[monstro_atirador].ativo) {
+            int chance_tiro = rand() % 2;
+            int monstro_atirador = rand() % (MAX_monstro * 2);
+
+            if (chance_tiro == 0 && monstro[monstro_atirador].ativo && monstro_atirador > MAX_monstro) {
                 tiro_monstros[i].ativo = 1;
                 tiro_monstros[i].x = monstro[monstro_atirador].x;
-                tiro_monstros[i].y = monstro[monstro_atirador].y -1;
+                tiro_monstros[i].y = monstro[monstro_atirador].y + 1;
             }
         } else {
             tempo_tiro_monstro++;
 
-        if (tempo_tiro_monstro > 4) {
+            if (tempo_tiro_monstro > 0) {
+                tempo_tiro_monstro = 0;
 
-            tempo_tiro_monstro=0;
-            
-            // Movimento do tiro do monstro
-            imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-            if (tiro_monstros[i].y < MAX_tela_y - 1) {
-                tiro_monstros[i].y++;
-                imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro_monstro;
-            } else {
-                tiro_monstros[i].ativo = 0;
+                // Remove o rastro do tiro anterior, se não houver um monstro nessa posição
+                if (imagem[tiro_monstros[i].y][tiro_monstros[i].x] == forma_tiro_monstro) {
+                    imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+                }
+
+                // Verifica se a próxima posição do tiro está ocupada por outro monstro
+                if (tiro_monstros[i].y < MAX_tela_y - 1) {
+                    int proxima_y = tiro_monstros[i].y + 1;
+
+                    // Checa se a posição abaixo do tiro tem um monstro
+                    int monstro_na_proxima_posicao = 0;
+                    for (int j = 0; j < MAX_monstro * 2; j++) {
+                        if (monstro[j].ativo && monstro[j].x == tiro_monstros[i].x && monstro[j].y == proxima_y) {
+                            monstro_na_proxima_posicao = 1;
+                            break;
+                        }
+                    }
+
+                    if (!monstro_na_proxima_posicao) {
+                        tiro_monstros[i].y++; // Move o tiro para a próxima posição
+                        imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro_monstro;
+                    } else {
+                        tiro_monstros[i].ativo = 0; // Desativa o tiro se ele não pode continuar
+                    }
+                } else {
+                    tiro_monstros[i].ativo = 0; // Desativa o tiro ao chegar no limite inferior
+                }
             }
-        }
+
             // Verifica se o tiro do monstro atingiu o jogador
             if (tiro_monstros[i].ativo && tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
                 vida--;
                 tiro_monstros[i].ativo = 0;
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
                 if (vida == 0) {
-                exit(0);
+                    printf("\nGame Over!\n");
+                    exit(0);
                 }
-            }  
-        
+            }
+        }
     }
 }
-    
-}
+
 
 // Função principal do jogo
 int main() {
