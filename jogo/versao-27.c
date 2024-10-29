@@ -627,7 +627,7 @@ void colisao_com_barreiras() {
                 }
             }
         }
-    }
+    } 
 }
 void tiro_monster() {
     
