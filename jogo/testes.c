@@ -35,7 +35,7 @@ int main() {
     pid_t pid_musica = fork();
     if (pid_musica == 0) { // Processo filho toca a música
         while (1) {
-            tocar_musica_fundo("/Users/user01/Documents/GitHub/programacao1/jogo/sons/musica-jogo.mp3");
+            tocar_musica_fundo("/Users/user01/Documents/GitHub/programacao1/jogo/sons/musica-jogo2.mp3");
         }
     } else if (pid_musica < 0) {
         perror("Erro ao criar o processo de música");
