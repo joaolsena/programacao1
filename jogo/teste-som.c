@@ -281,6 +281,7 @@ void configuracoes_iniciais(){
     inicia_barreira();
 }
 void tela_inicial() {
+    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/musica-jogo.mp3");
     do {
         limpar();
         printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
