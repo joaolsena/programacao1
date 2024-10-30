@@ -1,5 +1,5 @@
 // lista de coisas que faltam ser implementadas:
-// fazer as barreiras reaparecerem dps do monstro passar por elas 
+// fazer a musica de fundo pegar
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -281,7 +281,6 @@ void configuracoes_iniciais(){
     inicia_barreira();
 }
 void tela_inicial() {
-    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/musica-jogo.mp3");
     do {
         limpar();
         printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
@@ -501,6 +500,7 @@ void velocidade_monstro(){
         }
     if (monstros_ativos == 0)
     { 
+         tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/level-completed-230568.mp3");
           level++;
           velocidade=0;
           velocidade1=0;
@@ -714,7 +714,7 @@ void tiro_monster() {
                 vida--;
                 tiro_monstros[i].ativo = 0;
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-                tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/medium-explosion-40472.mp3");
+                tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/sons/videogame-death-sound-43894.mp3");
                 if (vida == 0) {
                     tela_game_over();
                 }
