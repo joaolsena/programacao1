@@ -1,6 +1,3 @@
-// lista de coisas que faltam ser implementadas:
-// arrumar o bug de movimento dos monstros
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h> // sem enter
