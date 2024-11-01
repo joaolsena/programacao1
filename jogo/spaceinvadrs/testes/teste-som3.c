@@ -1,5 +1,5 @@
 // lista de coisas que faltam ser implementadas:
-// fazer a musica de fundo pegar
+// editar melhor a musica de fundo no loop e o efeito sonoro de game over ta paia 
 
 #include <stdio.h>
 #include <stdlib.h>
