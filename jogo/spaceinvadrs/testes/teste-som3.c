@@ -1,11 +1,10 @@
-// lista de coisas que faltam ser implementadas:
-// editar melhor a musica de fundo no loop e o efeito sonoro de game over ta paia 
+ // para rodar o codigo: clang -o teste-som3 /Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/testes/teste-som3.c -lSDL2 -lSDL2_mixer
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <termios.h> // sem enter
-#include <unistd.h> // sem enter
-#include <time.h> // Para gerar números aleatórios
+#include <termios.h> 
+#include <unistd.h> 
+#include <time.h> 
 #include <fcntl.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -119,11 +118,13 @@ typedef struct {
 } barreira;
 
 barreira barreiras[max_barreira] = {{0, 0, 0, 0}};
+
+//sem enter
 int kbhit(void) {
     struct termios oldt, newt;
     int ch;
     int oldf;
-
+    
     tcgetattr(STDIN_FILENO, &oldt); // Salva as configurações atuais do terminal
     newt = oldt;
     newt.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
@@ -304,6 +305,7 @@ void configuracoes_iniciais(){
     inicia_monstros();
     inicia_barreira();
 }
+
 void tela_inicial() {
     do {
         limpar();
@@ -413,6 +415,7 @@ void disparos() {
         }
     }
 }
+
 // Função para mover monstros e atualizar suas posições
 void gera_monstro_especial(){
      if (!monstro4.ativo) {
