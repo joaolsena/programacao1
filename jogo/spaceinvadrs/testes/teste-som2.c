@@ -1,4 +1,4 @@
- // para rodar o codigo: clang -o teste-som3 /Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/testes/teste-som3.c -lSDL2 -lSDL2_mixer
+ // para rodar o codigo: clang -o teste-som2 /Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/testes/teste-som2.c -lSDL2 -lSDL2_mixer
 
 #include <stdio.h>
 #include <stdlib.h>
