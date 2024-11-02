@@ -1,16 +1,18 @@
+ // para rodar o codigo: clang -o space_invadrs /Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/space_invadrs.c -lSDL2 -lSDL2_mixer
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <termios.h> // sem enter
-#include <unistd.h> // sem enter
-#include <time.h> // Para gerar números aleatórios
+#include <termios.h> 
+#include <unistd.h> 
+#include <time.h> 
 #include <fcntl.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
-// Configurações de tela 
 #define MAX_tela_X 50  
 #define MAX_tela_y 16
 #define MAX_margem 30
 
-// Configurações de jogo
 #define forma_jogador '^'
 #define forma_tiro '|'
 #define forma_tiro_monstro '!'
@@ -19,11 +21,10 @@
 #define monstro_2 'H'
 #define monstro_3 'W'
 #define monstro_4  'X'
-#define MAX_monstro 10 // Máximo de monstros por linha
+#define MAX_monstro 10 
 #define max_tiro_monstro 3
 #define ATRASO_TIQUE 40000
 
-//config barreiras
 #define barreira_forma_1 '#'
 #define barreira_forma_2 '*'
 #define barreira_forma_3 '-'
@@ -50,7 +51,7 @@ char opcao;
 
 char imagem[MAX_tela_y][MAX_tela_X] = {0};
 
-// Estruturas para tiros, monstros e jogador
+
 typedef struct {
     int ativo;
     int x;
@@ -114,25 +115,27 @@ typedef struct {
 } barreira;
 
 barreira barreiras[max_barreira] = {{0, 0, 0, 0}};
+
+
 int kbhit(void) {
     struct termios oldt, newt;
     int ch;
     int oldf;
-
-    tcgetattr(STDIN_FILENO, &oldt); // Salva as configurações atuais do terminal
+    
+    tcgetattr(STDIN_FILENO, &oldt); 
     newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Aplica as novas configurações
+    newt.c_lflag &= ~(ICANON | ECHO); 
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); 
     oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK); // Modo não-bloqueante
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK); 
 
     ch = getchar();
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restaura as configurações originais
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); 
     fcntl(STDIN_FILENO, F_SETFL, oldf);
 
     if (ch != EOF) {
-        ungetc(ch, stdin); // Devolve o caractere ao buffer de entrada
+        ungetc(ch, stdin); 
         return 1;
     }
 
@@ -152,12 +155,41 @@ int getch(void) {
     return move;
 }
 
-// Função para limpar a tela
-void limpar() {
-    system("clear"); // Usar "cls" no Windows
+
+void tocar_som(char *arquivo_som) {
+    char comando[100];
+    snprintf(comando, sizeof(comando), "afplay '%s' &", arquivo_som); 
+    system(comando);
 }
 
-// Função para desenhar a tela
+void iniciarAudio() {
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        printf("Erro ao iniciar SDL: %s\n", SDL_GetError());
+        exit(1);
+    }
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        printf("Erro ao iniciar SDL_mixer: %s\n", Mix_GetError());
+        exit(1);
+    }
+}
+
+
+Mix_Music* tocarMusicaFundo(const char* caminho_musica) {
+    Mix_Music *musica = Mix_LoadMUS(caminho_musica);
+    if (!musica) {
+        printf("Erro ao carregar música: %s\n", Mix_GetError());
+        exit(1);
+    }
+    Mix_PlayMusic(musica, -1);  
+    return musica;
+}
+
+
+void limpar() {
+    system("clear"); 
+}
+
+
 void tela() {
   
     printf("%*sPontos: %d", MAX_margem + 27, "", ponto);
@@ -180,13 +212,10 @@ void tela() {
              }else if (imagem[i][j] == forma_jogador) {
                 printf("\033[34m%c\033[0m", forma_jogador);
             } else if (imagem[i][j] == monstro_1) {
-                // Cor verde para monstro_1
                 printf("\033[35m%c\033[0m", monstro_1);
             } else if (imagem[i][j] == monstro_2) {
-                // Cor vermelha para monstro_2
                 printf("\033[31m%c\033[0m", monstro_2);
             } else if (imagem[i][j] == monstro_3) {
-                // Cor azul para monstro_3
                 printf("\033[34m%c\033[0m", monstro_3);
             }else if (imagem[i][j] == monstro_4) {
                 printf("\033[33m%c\033[0m", monstro_4);
@@ -208,14 +237,14 @@ void tela() {
     }
 }
 
-// Função para inicializar o jogador
+
 void inicia_jogador() {
     jogador_p.x = MAX_tela_X / 2;
     jogador_p.y = MAX_tela_y - 2;
     imagem[jogador_p.y][jogador_p.x] = forma_jogador;
 }
 
-// Função para inicializar monstros
+
 void inicia_monstros() {
     for (int i = 0; i < MAX_monstro; i++) {
         
@@ -270,6 +299,7 @@ void configuracoes_iniciais(){
     inicia_monstros();
     inicia_barreira();
 }
+
 void tela_inicial() {
     do {
         limpar();
@@ -285,7 +315,7 @@ void tela_inicial() {
             configuracoes_iniciais();
             break; 
         } else if (opcao == 'i') {
-           // fazer uma bagulho de instrucoes do jogo algum dia ou so desisto 
+           
         } else if (opcao == 'q') {
             exit(0);
         }
@@ -295,7 +325,7 @@ void tela_inicial() {
 void limpa_tela() {
     for (int i = 0; i < MAX_tela_y; i++) {
         for (int j = 0; j < MAX_tela_X; j++) {
-            imagem[i][j] = ' '; // Limpa toda a matriz imagem
+            imagem[i][j] = ' '; 
         }
     }
 }
@@ -310,13 +340,14 @@ void reinicia_jogo() {
     level = 1;
     direcao = 1; 
     for (int i = 0; i < max_tiros; i++) {
-        tiro[i].ativo = 0; // Reseta os tiros
+        tiro[i].ativo = 0;
     }
     for (int i = 0; i < max_tiro_monstro; i++) {
-        tiro_monstros[i].ativo = 0; // Reseta os tiros dos monstros
+        tiro_monstros[i].ativo = 0; 
     }
+
     for (int i = 0; i < MAX_monstro * 2; i++) {
-        monstro[i].ativo = 0; // Reseta os monstros 
+        monstro[i].ativo = 0;
         monstro2[i].ativo = 0; 
         if (i < MAX_monstro) {
             monstro3[i].ativo = 0; 
@@ -325,12 +356,18 @@ void reinicia_jogo() {
          monstro4.ativo=0;
          imagem[monstro4.y][monstro4.x] = ' ';
     for (int i = 0; i < max_barreira; i++) {
-        barreiras[i].ativo = 0; // Reseta as barreiras
+        barreiras[i].ativo = 0;
     }
 }
 
 
+
 void tela_game_over() {
+    Mix_Music* musica = tocarMusicaFundo("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/musica-jogo2.mp3");
+     Mix_FreeMusic(musica);
+    Mix_CloseAudio();
+    SDL_Quit();
+     tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/death-sound.mp3");
     do
     {
     limpar();
@@ -351,6 +388,8 @@ void tela_game_over() {
         limpar();
         configuracoes_iniciais();
         limpar();
+        iniciarAudio();
+         Mix_Music* musica = tocarMusicaFundo("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/musica-jogo2.mp3");
         break;
     }else if (fim == 'q')
     {
@@ -359,7 +398,7 @@ void tela_game_over() {
     } while (1);
 }
 
-// Função para disparar tiros
+
 void disparos() {
     for (int i = 0; i < max_tiros; i++) {
         if (!tiro[i].ativo) {
@@ -367,17 +406,19 @@ void disparos() {
             tiro[i].x = jogador_p.x;
             tiro[i].y = jogador_p.y-1;
             imagem[tiro[i].y][tiro[i].x] = forma_tiro;
+            tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/laser-104024.mp3");
             break;
         }
     }
 }
-// Função para mover monstros e atualizar suas posições
+
 void gera_monstro_especial(){
      if (!monstro4.ativo) {
-            // Gera um número aleatório para determinar se o monstro4 deve aparecer
+            
             int num = rand() % 80; 
             if (num == 0) { 
                 monstro4.ativo = 1;
+                 tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/ufo_lowpitch.wav");
                 if(direcao2 == 1){
                 monstro4.x = 1;
                  }
@@ -390,7 +431,7 @@ void gera_monstro_especial(){
       tempo_monstro_especial++;
      if( tempo_monstro_especial>= 3){
       tempo_monstro_especial=0;
-      if (monstro4.ativo) imagem[monstro4.y][monstro4.x] = ' '; 
+      if (monstro4.ativo) imagem[monstro4.y][monstro4.x] = ' ';
       if (monstro4.ativo)  monstro4.x+= direcao2; 
       if (monstro4.ativo && (monstro4.x >= MAX_tela_X - 1 || monstro4.x <= 0)) {
                 monstro4.ativo = 0; 
@@ -443,9 +484,9 @@ void desenha_monstros_na_tela() {
 void verifica_bordas_e_atualiza_direcao() {
     int borda=0;
     for (int i = 0; i < MAX_monstro * 2; i++) {
-        if (monstro[i].ativo && (monstro[i].x == 1 || monstro[i].x == MAX_tela_X - 2) ||
-            monstro2[i].ativo && (monstro2[i].x == 1 || monstro2[i].x == MAX_tela_X - 2) ||
-            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x == 1 || monstro3[i].x == MAX_tela_X - 2)) {
+        if (monstro[i].ativo && (monstro[i].x <= 1 || monstro[i].x >= MAX_tela_X - 2) ||
+            monstro2[i].ativo && (monstro2[i].x <= 1 || monstro2[i].x >= MAX_tela_X - 2) ||
+            i < MAX_monstro && monstro3[i].ativo && (monstro3[i].x <= 1 || monstro3[i].x >= MAX_tela_X - 2)) {
             borda=1;
             velocidade++; 
             break;  
@@ -457,10 +498,9 @@ void verifica_bordas_e_atualiza_direcao() {
             desce_linha_monstros();     
     }
 }
-
 void velocidade_monstro(){
     int monstros_ativos = 0;
-     // Contagem de monstros do tipo 1 e 2
+     
     for (int i = 0; i < MAX_monstro * 2; i++) {
         if (monstro[i].ativo) monstros_ativos++;
         if (monstro2[i].ativo) monstros_ativos++;
@@ -470,7 +510,7 @@ void velocidade_monstro(){
         if (monstro3[i].ativo) monstros_ativos++;
     }
 
-    // Ajuste da velocidade
+   
     if (monstros_ativos == ((MAX_monstro * 5)/2)+15)
     {
         velocidade1=1;
@@ -488,6 +528,7 @@ void velocidade_monstro(){
         }
     if (monstros_ativos == 0)
     { 
+         tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/level-completed.mp3");
           level++;
           velocidade=0;
           velocidade1=0;
@@ -501,8 +542,7 @@ void velocidade_monstro(){
           velocidade= contador;
           contador=0;
          inicia_monstros();
-         gera_monstro_especial();
-          
+         gera_monstro_especial(); 
     } 
 }
 
@@ -522,15 +562,15 @@ void mover_jogador() {
      move = getch(); 
     imagem[jogador_p.y][jogador_p.x] = ' ';
     
-    if (move == '\033') { // Início da sequência de escape para teclas de seta
-        getch(); // Ignora o '['
-        switch(getch()) { // Captura a direção
-            case 'C': // Seta para a direita
+    if (move == '\033') { 
+        getch(); 
+        switch(getch()) { 
+            case 'C': 
                 if (jogador_p.x < MAX_tela_X - 2) { 
                     jogador_p.x++; 
                 }
                 break;
-            case 'D': // Seta para a esquerda
+            case 'D': 
                 if (jogador_p.x > 1) { 
                     jogador_p.x--; 
                 }
@@ -554,6 +594,7 @@ void mover_jogador() {
 }
 
 void colisao_com_monstro(){
+
 for (int i = 0; i < max_tiros; i++) {
         if (tiro[i].ativo) {
             for (int j = 0; j < MAX_monstro * 2; j++) {
@@ -562,6 +603,7 @@ for (int i = 0; i < max_tiros; i++) {
                     monstro[j].ativo = 0;
                     imagem[monstro[j].y][monstro[j].x] = ' ';
                     tiro[i].ativo = 0;
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
                     break; 
                 }
             }
@@ -573,6 +615,7 @@ for (int i = 0; i < max_tiros; i++) {
                     monstro2[j].ativo = 0;
                     imagem[monstro2[j].y][monstro2[j].x] = ' ';
                     tiro[i].ativo = 0;
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
                     break; 
                 }
             }
@@ -582,6 +625,7 @@ for (int i = 0; i < max_tiros; i++) {
                     monstro3[j].ativo = 0;
                     imagem[monstro3[j].y][monstro3[j].x] = ' ';
                     tiro[i].ativo = 0;
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
                     break; 
                 }
             }
@@ -591,6 +635,7 @@ for (int i = 0; i < max_tiros; i++) {
                 monstro4.ativo=0;
                 imagem[monstro4.y] [monstro4.x] = ' ';
                 tiro[i].ativo = 0;
+                tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
                 break;
             }
         }
@@ -614,7 +659,7 @@ void atualizar_resistencia_barreira(){
                 }
             }
             if (!monstro_na_posicao) {
-                // Atualiza a aparência da barreira apenas se não houver monstro
+                
                 if (barreiras[j].resistencia > 7) {
                     imagem[barreiras[j].y][barreiras[j].x] = barreira_forma_1;
                 } else if (barreiras[j].resistencia > 3) {
@@ -626,7 +671,7 @@ void atualizar_resistencia_barreira(){
                     barreiras[j].ativo = 0;
                 }
             } else {
-                imagem[barreiras[j].y][barreiras[j].x] = ' ';  // Monstro aparece na barreira
+                imagem[barreiras[j].y][barreiras[j].x] = ' ';  
             }
         }
     }
@@ -643,6 +688,7 @@ void colisao_com_barreiras() {
                     barreiras[j].resistencia--;
                     tiro[i].ativo = 0;
                     imagem[tiro[i].y][tiro[i].x] = ' ';
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                     atualizar_resistencia_barreira();
                     }
         }
@@ -653,7 +699,7 @@ void tiro_monster() {
     
     for (int i = 0; i < max_tiro_monstro; i++) {
         if (!tiro_monstros[i].ativo) {
-            // Seleciona aleatoriamente um monstro para disparar
+            
             int chance_tiro = rand() % (11 -(velocidade1*2));
             int monstro_atirador = rand () %MAX_monstro;
             if (chance_tiro==0 && monstro3[monstro_atirador].ativo) {
@@ -681,25 +727,26 @@ void tiro_monster() {
                     }
 
                     if (proxima_y < MAX_tela_y - 1 && !monstro_na_proxima_posicao) {
-                    tiro_monstros[i].y++; // Move o tiro para baixo
+                    tiro_monstros[i].y++; 
                     imagem[tiro_monstros[i].y][tiro_monstros[i].x] = forma_tiro_monstro;
                 } else if (monstro_na_proxima_posicao) {
-                    tiro_monstros[i].y++; // Move o tiro para baixo sem desenhá-lo na posição do monstro
+                    tiro_monstros[i].y++; 
                 } else {
-                    tiro_monstros[i].ativo = 0; // Desativa o tiro ao chegar no limite inferior
+                    tiro_monstros[i].ativo = 0; 
                 }
             
             }
-            // Verifica se o tiro do monstro atingiu o jogador
+           
             if (tiro_monstros[i].ativo && tiro_monstros[i].x == jogador_p.x && tiro_monstros[i].y == jogador_p.y) {
                 vida--;
                 tiro_monstros[i].ativo = 0;
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+               tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                 if (vida == 0) {
                     tela_game_over();
                 }
             }
-            // verifica se atingiu a barreira
+         
             for (int j = 0; j < max_barreira; j++)
             {
                 if (barreiras[j].ativo && tiro_monstros[i].ativo &&
@@ -708,14 +755,16 @@ void tiro_monster() {
         
                     barreiras[j].resistencia--;
                     tiro_monstros[i].ativo = 0;
-                    imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';}
+                    imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+                   tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
+                    
+            }
                    atualizar_resistencia_barreira();
         }
     }
 }   
 }
 
-// Função para mover os tiros e verificar colisão com monstros
 void tiro_e_colisao() {
     tiro_monster();
     for (int i = 0; i < max_tiros; i++) {
@@ -737,9 +786,11 @@ void tiro_e_colisao() {
     }
 }
 
-// Função principal do jogo
+
 int main() {
     srand(time(NULL));
+    iniciarAudio(); 
+    Mix_Music* musica = tocarMusicaFundo("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/musica-jogo2.mp3");
     tela_inicial();
 
     while (vida > 0) {
@@ -750,5 +801,8 @@ int main() {
         tiro_e_colisao();
         usleep(ATRASO_TIQUE);
     }
+    Mix_FreeMusic(musica);
+    Mix_CloseAudio();
+    SDL_Quit();
     return 0;
 }
