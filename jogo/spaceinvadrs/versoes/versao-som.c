@@ -542,8 +542,7 @@ void velocidade_monstro(){
           velocidade= contador;
           contador=0;
          inicia_monstros();
-         gera_monstro_especial();
-          
+         gera_monstro_especial(); 
     } 
 }
 
@@ -689,7 +688,7 @@ void colisao_com_barreiras() {
                     barreiras[j].resistencia--;
                     tiro[i].ativo = 0;
                     imagem[tiro[i].y][tiro[i].x] = ' ';
-                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                     atualizar_resistencia_barreira();
                     }
         }
@@ -742,7 +741,7 @@ void tiro_monster() {
                 vida--;
                 tiro_monstros[i].ativo = 0;
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-               tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
+               tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                 if (vida == 0) {
                     tela_game_over();
                 }
@@ -757,7 +756,7 @@ void tiro_monster() {
                     barreiras[j].resistencia--;
                     tiro_monstros[i].ativo = 0;
                     imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-                   tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
+                   tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                     
             }
                    atualizar_resistencia_barreira();

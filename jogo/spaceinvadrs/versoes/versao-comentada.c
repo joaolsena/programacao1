@@ -703,7 +703,7 @@ void colisao_com_barreiras() {
                     barreiras[j].resistencia--; // Reduz a resistência da barreira
                     tiro[i].ativo = 0;
                     imagem[tiro[i].y][tiro[i].x] = ' ';
-                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
+                    tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                     atualizar_resistencia_barreira();
                 }
             }
@@ -754,7 +754,7 @@ void tiro_monster() {
                 vida--; // Reduz vida do jogador
                 tiro_monstros[i].ativo = 0;
                 imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-                tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
+                tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                 if (vida == 0) {
                     tela_game_over();
                 }
@@ -769,7 +769,7 @@ void tiro_monster() {
                     barreiras[j].resistencia--;
                     tiro_monstros[i].ativo = 0;
                     imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
-                   tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion.mp3");
+                   tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvadrs/sons/explosion2.mp3");
                     
             }
                    atualizar_resistencia_barreira();
