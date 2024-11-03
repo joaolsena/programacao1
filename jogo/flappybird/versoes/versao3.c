@@ -92,9 +92,9 @@ void tela() {
             } else if (i == MAX_tela_y - 1) {
                 printf("-");
             } else if (imagem[i][j] == forma_jogador) {
-                printf("\033[34m%c\033[0m", forma_jogador);
+                printf("\033[33m%c\033[0m", forma_jogador);
             } else if (imagem[i][j] == forma_obstacluo) {
-                printf("%c", forma_obstacluo);
+                printf("\033[32m%c\033[0m", forma_obstacluo);
             } else {
                 printf(" ");
             }
