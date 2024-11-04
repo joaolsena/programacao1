@@ -10,11 +10,11 @@
 #define MAX_margem 30
 
 #define forma_jogador '>'
-#define forma_obstaculo '@'
+#define forma_obstaculo '#'
 
 #define gravidade 1
-#define pulo -3
-#define espaco 3
+#define pulo -2
+#define espaco 2
 #define ATRASO_TIQUE 200000
 #define max_tubos 2
 
@@ -112,7 +112,7 @@ void inicia_jogador() {
 void inicia_obstaculos() {
     for (int i = 0; i < 2; i++) {
         obstaculos[i].x = MAX_tela_X - 1 - (i * (MAX_tela_X / 2));  
-        obstaculos[i].y = (MAX_tela_y / 2) - (espaco / 2) + (rand() % 4);  
+        obstaculos[i].y = (MAX_tela_y / 2) - (espaco / 2) + (rand() % 6) - 3;;  
     }
 }
 
@@ -208,8 +208,11 @@ void tela_game_over() {
 
 void atualiza_jogador() {
     imagem[bird.y][bird.x] = ' ';
-    if (kbhit() && getch() == ' ') {
+    if (kbhit()) {
+        char move=getch();
+        if(move == ' '){
         bird.y += pulo;
+        }
     } else {
         bird.y += gravidade;
     }
@@ -246,7 +249,7 @@ void atualiza_obstaculos() {
 
         if (obstaculos[i].x < 1) {
             obstaculos[i].x = MAX_tela_X - 1;
-            obstaculos[i].y = (MAX_tela_y / 2) - (espaco / 2) + (rand() % 4);  
+            obstaculos[i].y = (MAX_tela_y / 2) - (espaco / 2) + (rand() % 6) - 3;;  
         }
     }
 
@@ -254,12 +257,12 @@ void atualiza_obstaculos() {
 }
 void colisao() {
     for (int i = 0; i < max_tubos; i++) {
-        if ((bird.x == obstaculos[i].x || bird.x == obstaculos[i].x + 1) && (bird.y < obstaculos[i].y || bird.y > obstaculos[i].y + espaco)) {   
+        if ((bird.x == obstaculos[i].x || bird.x == obstaculos[i].x + 1) && (bird.y < obstaculos[i].y -1|| bird.y > obstaculos[i].y + espaco +1)) {   
                 tela_game_over();  
         }
     }
 
-    if (bird.y >= MAX_tela_y - 1 || bird.y < 0) {
+    if (bird.y >= MAX_tela_y - 1 || bird.y < 1) {
         tela_game_over(); 
     }
 }
