@@ -174,11 +174,8 @@ void atualiza_obstaculos() {
 }
 void colisao() {
     for (int i = 0; i < max_tubos; i++) {
-        
-        if (bird.x >= obstaculos[i].x && bird.x <= obstaculos[i].x + 1) {
-            if (bird.y <= obstaculos[i].y || bird.y >= obstaculos[i].y + espaco) {
+        if ((bird.x == obstaculos[i].x || bird.x == obstaculos[i].x + 1) && (bird.y < obstaculos[i].y || bird.y > obstaculos[i].y + espaco)) {   
                 exit(1);  
-            }
         }
     }
 
