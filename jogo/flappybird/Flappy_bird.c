@@ -142,10 +142,16 @@ void tela_inicial() {
             configuracoes_iniciais();
             break; 
         } else if (opcao == 'i') {
-             printf("%*s Instruções:\n", MAX_margem + 45, "");
+            limpar();
+            printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+            printf("%*sInstruções\n", MAX_margem + 53, "");
+             printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
             printf("%*s Use a barra de espaço para pular.\n", MAX_margem + 35, "");
+             printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
             printf("%*s Evite os obstáculos para aumentar sua pontuação.\n", MAX_margem + 35, "");
+             printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
             printf("%*s Pressione qualquer tecla para voltar ao menu.\n", MAX_margem + 35, "");
+             printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
             getch(); 
            
         } else if (opcao == 'q') {
