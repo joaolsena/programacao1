@@ -5,9 +5,9 @@
 #include <time.h>
 #include <fcntl.h>
 
-#define MAX_tela_X 40
+#define MAX_tela_X 30
 #define MAX_tela_y 20
-#define MAX_margem 30
+#define MAX_margem 40
 
 #define forma_jogador '>'
 #define forma_obstaculo '#'
@@ -16,7 +16,7 @@
 #define pulo -2
 #define espaco 2
 #define ATRASO_TIQUE 200000
-#define max_tubos 2
+#define max_tubos 4
 
 int ponto=0;
 int pontuacao_maxima=0;
@@ -35,7 +35,7 @@ typedef struct {
     int y;
 } obstaculo;
 
-obstaculo obstaculos[2];  // Dois obstáculos (pares de tubos)
+obstaculo obstaculos[max_tubos];  // Dois obstáculos (pares de tubos)
 
 int kbhit(void) {
     struct termios oldt, newt;
@@ -116,8 +116,8 @@ void inicia_jogador() {
 }
 
 void inicia_obstaculos() {
-    for (int i = 0; i < 2; i++) {
-        obstaculos[i].x = MAX_tela_X - 1 - (i * (MAX_tela_X / 2));  
+    for (int i = 0; i < max_tubos; i++) {
+        obstaculos[i].x = MAX_tela_X - 1 - (i * (MAX_tela_X / max_tubos)- rand() % 4);  
         obstaculos[i].y = (MAX_tela_y / 2) - (espaco / 2) + (rand() % 6) - 3;;  
     }
 }
@@ -129,13 +129,13 @@ void  configuracoes_iniciais(){
 void tela_inicial() {
     do {
         limpar();
-        printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-        printf("%*s                  Flappy Bird                    \n", MAX_margem + 45, "");
-        printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-        printf("%*s  Pressione 's' para iniciar o jogo\n", MAX_margem + 45, "");
-        printf("%*s  Pressione 'i' para ver as instruções\n", MAX_margem + 45, "");
-        printf("%*s  Pressione 'q' para sair\n", MAX_margem + 45, "");
-        printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
+        printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+        printf("%*s                  Flappy Bird                    \n", MAX_margem + 35, "");
+        printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+        printf("%*s  Pressione 's' para iniciar o jogo\n", MAX_margem + 35, "");
+        printf("%*s  Pressione 'i' para ver as instruções\n", MAX_margem + 35, "");
+        printf("%*s  Pressione 'q' para sair\n", MAX_margem + 35, "");
+        printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
         char opcao = getch();
         if (opcao == 's') {
             tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/flappybird/sons/swoosh-101soundboards.mp3");
@@ -143,9 +143,9 @@ void tela_inicial() {
             break; 
         } else if (opcao == 'i') {
              printf("%*s Instruções:\n", MAX_margem + 45, "");
-            printf("%*s Use a barra de espaço para pular.\n", MAX_margem + 45, "");
-            printf("%*s Evite os obstáculos para aumentar sua pontuação.\n", MAX_margem + 45, "");
-            printf("%*s Pressione qualquer tecla para voltar ao menu.\n", MAX_margem + 45, "");
+            printf("%*s Use a barra de espaço para pular.\n", MAX_margem + 35, "");
+            printf("%*s Evite os obstáculos para aumentar sua pontuação.\n", MAX_margem + 35, "");
+            printf("%*s Pressione qualquer tecla para voltar ao menu.\n", MAX_margem + 35, "");
             getch(); 
            
         } else if (opcao == 'q') {
@@ -191,14 +191,14 @@ void tela_game_over() {
     do
     {
     limpar();
-    printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-    printf("%*s                   GAME OVER                     \n", MAX_margem + 45, "");
-    printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-     printf("%*s        Pontuação maxima: %d\n", MAX_margem + 45, "", pontuacao_maxima);
-    printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-    printf("%*s        Pontuação Final: %d\n", MAX_margem + 45, "", ponto);
-    printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-    printf("%*sPressione f para voltar ao jogo ou q para sair...\n", MAX_margem + 45, "");
+    printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+    printf("%*s                   GAME OVER                     \n", MAX_margem + 35, "");
+    printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+     printf("%*s        Pontuação maxima: %d\n", MAX_margem + 35, "", pontuacao_maxima);
+    printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+    printf("%*s        Pontuação Final: %d\n", MAX_margem + 35, "", ponto);
+    printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
+    printf("%*sPressione f para voltar ao jogo ou q para sair...\n", MAX_margem + 35, "");
    char fim = getch();
     if (fim == 'f')
     {   
@@ -258,7 +258,7 @@ void atualiza_obstaculos() {
         }
 
         if (obstaculos[i].x < 1) {
-            obstaculos[i].x = MAX_tela_X - 1;
+            obstaculos[i].x = MAX_tela_X - 1 - rand() % 4;
             obstaculos[i].y = (MAX_tela_y / 2) - (espaco / 2) + (rand() % 6) - 3;;  
         }
     }
@@ -267,7 +267,7 @@ void atualiza_obstaculos() {
 }
 void colisao() {
     for (int i = 0; i < max_tubos; i++) {
-        if ((bird.x == obstaculos[i].x || bird.x == obstaculos[i].x + 1) && (bird.y < obstaculos[i].y -1|| bird.y > obstaculos[i].y + espaco +1)) {   
+        if ((bird.x == obstaculos[i].x || bird.x == obstaculos[i].x + 1) && (bird.y < obstaculos[i].y|| bird.y > obstaculos[i].y + espaco)) {   
             tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/flappybird/sons/flappy-bird-hit-sound-101soundboards.mp3");
                 tela_game_over();  
         }
@@ -285,8 +285,8 @@ int main() {
     while (1) {
         limpar();
         tela();
-        atualiza_jogador();
         atualiza_obstaculos();
+         atualiza_jogador();
         colisao();
         usleep(ATRASO_TIQUE - (ponto*100));
     }
