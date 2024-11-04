@@ -75,7 +75,7 @@ int getch(void) {
 }
 
 void tocar_som(char *arquivo_som) {
-    char comando[100];
+    char comando[150];
     snprintf(comando, sizeof(comando), "afplay '%s' &", arquivo_som); 
     system(comando);
 }
