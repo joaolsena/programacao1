@@ -155,7 +155,6 @@ int getch(void) {
     return move;
 }
 
-
 void tocar_som(char *arquivo_som) {
     char comando[100];
     snprintf(comando, sizeof(comando), "afplay '%s' &", arquivo_som); 
