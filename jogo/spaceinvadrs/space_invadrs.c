@@ -162,6 +162,7 @@ void tocar_som(char *arquivo_som) {
 }
 
 void iniciarAudio() {
+    // inicia dentro do if
     if (SDL_Init(SDL_INIT_AUDIO) < 0) {
         printf("Erro ao iniciar SDL: %s\n", SDL_GetError());
         exit(1);
@@ -183,11 +184,9 @@ Mix_Music* tocarMusicaFundo(const char* caminho_musica) {
     return musica;
 }
 
-
 void limpar() {
     system("clear"); 
 }
-
 
 void tela() {
   
