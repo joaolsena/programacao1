@@ -5,7 +5,7 @@
 #include <time.h>
 #include <fcntl.h>
 
-#define MAX_tela_X 30
+#define MAX_tela_X 50
 #define MAX_tela_y 30
 #define MAX_margem 30
 
@@ -113,8 +113,8 @@ void inicia_cobra(){
 }
 
 void inicia_comida(){
-    comida.x= rand() % MAX_tela_X-1;
-    comida.y= rand() % MAX_tela_y-1;
+    comida.x= rand() % (MAX_tela_X-2)+1;
+    comida.y= rand() % (MAX_tela_y-2)+1;
     comida.ativo=1;
     imagem[comida.y][comida.x]=forma_comida;
 }
