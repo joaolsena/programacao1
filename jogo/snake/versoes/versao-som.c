@@ -117,8 +117,30 @@ void inicia_cobra() {
 }
 
 void inicia_comida() {
-    comida.x = rand() % (MAX_tela_X - 2) + 1;
-    comida.y = rand() % (MAX_tela_y - 2) + 1;
+    int posicao_valida = 0;
+    
+    while (!posicao_valida) {
+      
+        comida.x = rand() % (MAX_tela_X - 2) + 1;
+        comida.y = rand() % (MAX_tela_y - 2) + 1;
+        
+       
+        posicao_valida = 1;
+
+       
+        if (comida.x == cabeca.x && comida.y == cabeca.y) {
+            posicao_valida = 0;
+        }
+
+      
+        for (int i = 0; i < tamanho_corpo; i++) {
+            if (comida.x == corpo[i].x && comida.y == corpo[i].y) {
+                posicao_valida = 0;
+                break;
+            }
+        }
+    }
+
     comida.ativo = 1;
     imagem[comida.y][comida.x] = forma_comida;
 }
