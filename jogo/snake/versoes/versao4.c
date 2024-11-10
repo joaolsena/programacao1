@@ -198,6 +198,6 @@ int main() {
         mover_cobra();
         colisao_tela();
         colisao_corpo();
-        usleep(ATRASO_TIQUE);
+        usleep(ATRASO_TIQUE-(ponto*100));
     }
 }
