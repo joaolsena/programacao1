@@ -775,6 +775,18 @@ void tiro_monster() {
             }
                    atualizar_resistencia_barreira();
         }
+
+        for (int j = 0; j < max_tiros; j++)
+        {
+           if(tiro[j].ativo && tiro_monstros[i].ativo && tiro[j].x==tiro_monstros[i].x && tiro[j].y==tiro_monstros[i].y){
+            tiro_monstros[i].ativo=0;
+            tiro[j].ativo=0;
+            imagem[tiro[j].y][tiro[j].x] = ' ';
+            imagem[tiro_monstros[i].y][tiro_monstros[i].x] = ' ';
+             tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvaders/sons/explosion2.mp3");
+           }
+        }
+        
     }
 }   
 }
