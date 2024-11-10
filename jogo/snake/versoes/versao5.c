@@ -122,6 +122,40 @@ void inicia_comida() {
     imagem[comida.y][comida.x] = forma_comida;
 }
 
+void  configuracoes_iniciais(){
+    inicia_cobra();
+    inicia_comida();
+}
+
+void tela_inicial() {
+    do {
+        limpar();
+        printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
+        printf("%*s                  jogo da cobrinha                    \n", MAX_margem + 45, "");
+        printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
+        printf("%*s  Pressione 's' para iniciar o jogo\n", MAX_margem + 45, "");
+        printf("%*s  Pressione 'i' para ver as instruções\n", MAX_margem + 45, "");
+        printf("%*s  Pressione 'q' para sair\n", MAX_margem + 45, "");
+        printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
+        char opcao = getch();
+        if (opcao == 's') {
+            configuracoes_iniciais();
+            break; 
+        } else if (opcao == 'i') {
+             limpar();
+            printf("%*sInstruções do Jogo da Cobra:\n", MAX_margem + 45, "");
+            printf("%*sUse as setas para mover a cobra.\n", MAX_margem + 45, "");
+            printf("%*sComa as @ para crescer e ganhar pontos.\n", MAX_margem + 45, "");
+            printf("%*sEvite bater nas paredes ou no corpo da cobra.\n", MAX_margem + 45, "");
+            printf("%*sA cada comida, a cobra cresce e a pontuação aumenta.\n", MAX_margem + 45, "");
+            printf("%*s Pressione qualquer tecla para voltar ao menu.\n", MAX_margem + 45, "");
+            getch(); 
+        } else if (opcao == 'q') {
+            exit(0);
+        }
+    } while (1);
+}
+
 void colisa_comida() {
     if (comida.ativo && cabeca.x == comida.x && cabeca.y == comida.y) {
         ponto += 10;
@@ -205,8 +239,7 @@ void mover_cobra() {
 
 int main() {
     srand(time(NULL));
-    inicia_cobra();
-    inicia_comida();
+  tela_inicial();
     while (1) {
         limpar();
         tela();
