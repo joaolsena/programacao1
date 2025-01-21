@@ -10,10 +10,7 @@ int main() {
     printf("endereço apontado por ptr: %p\n", ptr);
     printf("endereco do ptr: %p\n", &ptr);
 
-    x= x+10;
-     printf("conteudo de x: %d\n", x);
-     printf("Endereço de x: %p\n", &x);
-
+   
     return 0;
 }
 

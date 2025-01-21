@@ -2,7 +2,7 @@
 #include <stdlib.h> // Para malloc
 
 int main() {
-    int *p; // Inicializa o ponteiro com NULL
+    int *p = NULL; // Inicializa o ponteiro com NULL
     
   
     if (p == NULL) {
