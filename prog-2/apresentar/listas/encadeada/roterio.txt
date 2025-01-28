@@ -1,0 +1,102 @@
+1. Introdução
+
+O que é uma lista encadeada?
+Uma lista encadeada é uma estrutura de dados dinâmica composta por nós.
+
+Cada nó contém:
+Um dado (valor armazenado).
+Um ponteiro para o próximo nó (ou para o anterior, no caso de listas duplamente encadeadas).
+
+Vantagens:
+Flexibilidade na alocação de memória.
+Inserções e remoções eficientes.
+
+2. Lista Encadeada Simples
+
+Estrutura de um Nó
+struct Node {
+    int data;           // Dado armazenado no nó
+    struct Node* next;  // Ponteiro para o próximo nó
+};
+
+
+Operações Básicas
+
+Inserir no Início:
+Cria um novo nó.
+Aponta o next do novo nó para o início da lista.
+Atualiza o início da lista para o novo nó.
+
+void inserirNoInicio(struct Node** head, int valor) {
+    struct Node* novoNo = (struct Node*)malloc(sizeof(struct Node));
+    novoNo->data = valor;
+    novoNo->next = *head;
+    *head = novoNo;
+}
+
+Antes:
+[10] -> [20] -> NULL
+
+Depois de inserir 5 no início:
+[5] -> [10] -> [20] -> NULL
+
+Remover no Início:
+Aponta o início da lista para o segundo nó.
+Libera a memória do nó removido.
+Código:
+
+void removerNoInicio(struct Node** head) {
+    if (*head == NULL) return; // Lista vazia
+
+    struct Node* temp = *head; // Nó a ser removido
+    *head = (*head)->next;     // Atualiza o início da lista
+    free(temp);                // Libera a memória
+}
+
+Antes:
+[5] -> [10] -> [20] -> NULL
+
+Depois de remover o primeiro nó:
+[10] -> [20] -> NULL
+
+
+Inserir no Meio:
+Encontra o nó anterior ao local de inserção.
+Ajusta os ponteiros para incluir o novo nó.
+Código:
+void inserirNoMeio(struct Node* anterior, int valor) {
+    if (anterior == NULL) return; // Verifica se o nó anterior é válido
+
+    struct Node* novoNo = (struct Node*)malloc(sizeof(struct Node));
+    novoNo->data = valor;
+    novoNo->next = anterior->next; // Novo nó aponta para o próximo do anterior
+    anterior->next = novoNo;       // Anterior aponta para o novo nó
+}
+
+Antes:
+[10] -> [20] -> NULL
+
+Depois de inserir 15 após 10:
+[10] -> [15] -> [20] -> NULL
+
+
+
+Remover no Meio:
+Encontra o nó anterior ao nó a ser removido.
+Ajusta os ponteiros para "pular" o nó removido.
+Libera a memória do nó removido.
+Código:
+void removerNoMeio(struct Node* anterior) {
+    if (anterior == NULL || anterior->next == NULL) return; // Verifica se é válido
+
+    struct Node* noRemovido = anterior->next; // Nó a ser removido
+    anterior->next = noRemovido->next;        // Anterior aponta para o próximo do removido
+    free(noRemovido);                         // Libera a memória
+}
+
+Antes:
+[10] -> [15] -> [20] -> NULL
+
+Depois de remover 15:
+[10] -> [20] -> NULL
+

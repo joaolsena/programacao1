@@ -1,0 +1,120 @@
+
+3. Lista Duplamente Encadeada
+
+Estrutura de um Nó
+
+struct Node {
+    int data;           // Dado armazenado no nó
+    struct Node* next;  // Ponteiro para o próximo nó
+    struct Node* prev;  // Ponteiro para o nó anterior
+};
+
+
+Operações Básicas
+
+Inserir no Início:
+Cria um novo nó.
+Ajusta os ponteiros next e prev.
+Código:
+void inserirNoInicio(struct Node** head, int valor) {
+    struct Node* novoNo = (struct Node*)malloc(sizeof(struct Node));
+    novoNo->data = valor;
+    novoNo->next = *head;
+    novoNo->prev = NULL;
+
+    if (*head != NULL) {
+        (*head)->prev = novoNo; // O anterior do nó atual aponta para o novo nó
+    }
+    *head = novoNo; // Atualiza o início da lista
+}
+
+Antes:
+NULL <- [10] <-> [20] -> NULL
+
+Depois de inserir 5 no início:
+NULL <- [5] <-> [10] <-> [20] -> NULL
+
+
+
+Remover no Início:
+Ajusta os ponteiros next e prev.
+Libera a memória do nó removido.
+Código:
+
+void removerNoInicio(struct Node** head) {
+    if (*head == NULL) return; // Lista vazia
+
+    struct Node* temp = *head; // Nó a ser removido
+    *head = (*head)->next;     // Atualiza o início da lista
+    if (*head != NULL) {
+        (*head)->prev = NULL;  // O anterior do novo início é NULL
+    }
+    free(temp); // Libera a memória
+}
+
+Antes:
+NULL <- [5] <-> [10] <-> [20] -> NULL
+
+Depois de remover o primeiro nó:
+NULL <- [10] <-> [20] -> NULL
+
+
+
+1. Adicionar no Meio da Lista Duplamente Encadeada
+
+Passos para Inserção:
+
+Encontre o nó anterior ao local onde deseja inserir.
+Crie um novo nó.
+Ajuste os ponteiros next e prev para incluir o novo nó.
+Código em C:
+
+void inserirNoMeio(struct Node* anterior, int valor) {
+    if (anterior == NULL) return; // Verifica se o nó anterior é válido
+
+    // Cria o novo nó
+    struct Node* novoNo = (struct Node*)malloc(sizeof(struct Node));
+    novoNo->data = valor;
+
+    // Ajusta os ponteiros
+    novoNo->next = anterior->next; // Novo nó aponta para o próximo do anterior
+    novoNo->prev = anterior;       // Novo nó aponta para o anterior
+    if (anterior->next != NULL) {
+        anterior->next->prev = novoNo; // O anterior do próximo nó aponta para o novo nó
+    }
+    anterior->next = novoNo;       // Anterior aponta para o novo nó
+}
+
+Antes:
+NULL <- [10] <-> [20] <-> [30] -> NULL
+
+Inserir 15 após o nó com valor 10:
+NULL <- [10] <-> [15] <-> [20] <-> [30] -> NULL
+
+
+
+2. Remover no Meio da Lista Duplamente Encadeada
+
+Passos para Remoção:
+
+Encontre o nó anterior ao nó que deseja remover.
+Ajuste os ponteiros next e prev para "pular" o nó a ser removido.
+Libere a memória do nó removido.
+Código em C:
+
+void removerNoMeio(struct Node* anterior) {
+    if (anterior == NULL || anterior->next == NULL) return; // Verifica se é válido
+
+    struct Node* noRemovido = anterior->next; // Nó a ser removido
+    anterior->next = noRemovido->next;        // Anterior aponta para o próximo do removido
+    if (noRemovido->next != NULL) {
+        noRemovido->next->prev = anterior;    // O anterior do próximo nó aponta para o anterior
+    }
+    free(noRemovido);                         // Libera a memória
+}
+
+Antes:
+NULL <- [10] <-> [15] <-> [20] <-> [30] -> NULL
+
+Remover o nó com valor 15:
+NULL <- [10] <-> [20] <-> [30] -> NULL
