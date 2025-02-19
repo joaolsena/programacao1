@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "termios.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "stdlib.h": "c"
     }
 }

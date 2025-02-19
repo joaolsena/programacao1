@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "arvore2_3.h"
+/*gcc main.c arvore2_3.c -o main -Wall -Wextra -g*/ 
+
 
 int main(){
     arvore2_3 arv;
