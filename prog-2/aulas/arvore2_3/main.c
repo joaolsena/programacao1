@@ -243,6 +243,281 @@ Node* inserir(Node* raiz, int chave) {
     return raiz;
 }
 
+// Função para encontrar a menor chave na subárvore
+int encontrarMenorChave(Node* no) {
+    if (no == NULL) return -1;
+    
+    if (no->ehFolha) {
+        return no->chaveEsquerda;
+    }
+    
+    while (!no->ehFolha) {
+        no = no->esquerda;
+    }
+    return no->chaveEsquerda;
+}
+
+// Função para encontrar a maior chave na subárvore
+int encontrarMaiorChave(Node* no) {
+    if (no == NULL) return -1;
+    
+    if (no->ehFolha) {
+        return no->numChaves == 2 ? no->chaveDireita : no->chaveEsquerda;
+    }
+    
+    while (!no->ehFolha) {
+        if (no->numChaves == 2) {
+            no = no->direita;
+        } else {
+            no = no->meio;
+        }
+    }
+    return no->numChaves == 2 ? no->chaveDireita : no->chaveEsquerda;
+}
+
+// Função para emprestar uma chave do irmão da esquerda
+bool emprestarDoIrmaoEsquerdo(Node* atual, Node* irmao, Node* pai) {
+    if (irmao == NULL || irmao->numChaves == 1) return false;
+    
+    // Move a chave do pai para o nó atual
+    if (atual == pai->meio) {
+        atual->chaveDireita = atual->chaveEsquerda;
+        atual->chaveEsquerda = pai->chaveEsquerda;
+        pai->chaveEsquerda = irmao->chaveDireita;
+    } else {
+        atual->chaveDireita = atual->chaveEsquerda;
+        atual->chaveEsquerda = pai->chaveDireita;
+        pai->chaveDireita = irmao->chaveDireita;
+    }
+    
+    // Atualiza o irmão
+    irmao->numChaves = 1;
+    irmao->chaveDireita = -1;
+    atual->numChaves = 2;
+    
+    return true;
+}
+
+// Função para emprestar uma chave do irmão da direita
+bool emprestarDoIrmaoDireito(Node* atual, Node* irmao, Node* pai) {
+    if (irmao == NULL || irmao->numChaves == 1) return false;
+    
+    if (atual == pai->esquerda) {
+        atual->chaveDireita = pai->chaveEsquerda;
+        pai->chaveEsquerda = irmao->chaveEsquerda;
+    } else {
+        atual->chaveDireita = pai->chaveDireita;
+        pai->chaveDireita = irmao->chaveEsquerda;
+    }
+    
+    irmao->chaveEsquerda = irmao->chaveDireita;
+    irmao->chaveDireita = -1;
+    irmao->numChaves = 1;
+    atual->numChaves = 2;
+    
+    return true;
+}
+
+// Função para fundir dois nós
+Node* fundirNos(Node* esquerdo, Node* direito, int chaveDoMeio) {
+    Node *dirEsq = NULL, *dirMeio = NULL, *dirDir = NULL;
+    if (!direito->ehFolha) {
+        dirEsq = direito->esquerda;
+        dirMeio = direito->meio;
+        dirDir = direito->direita;
+    }
+
+    esquerdo->chaveDireita = chaveDoMeio;
+    esquerdo->numChaves = 2;
+
+    if (!esquerdo->ehFolha) {
+        esquerdo->meio = esquerdo->direita;
+        esquerdo->direita = dirEsq;
+    }
+
+    free(direito);
+    return esquerdo;
+}
+
+// Função recursiva para remoção
+Node* removerRecursivo(Node* no, int chave, bool* precisaAjuste) {
+    if (no == NULL) {
+        *precisaAjuste = false;
+        return NULL;
+    }
+
+    // Se é um nó folha
+    if (no->ehFolha) {
+        if (no->chaveEsquerda == chave || (no->numChaves == 2 && no->chaveDireita == chave)) {
+            if (no->numChaves == 2) {
+                if (chave == no->chaveEsquerda) {
+                    no->chaveEsquerda = no->chaveDireita;
+                }
+                no->chaveDireita = -1;
+                no->numChaves = 1;
+                *precisaAjuste = false;
+            } else {
+                no->chaveEsquerda = -1;
+                no->numChaves = 0;
+                *precisaAjuste = true;
+            }
+            return no;
+        }
+        *precisaAjuste = false;
+        return no;
+    }
+
+    Node *filho = NULL, *irmaoEsq = NULL, *irmaoDir = NULL;
+    int *chaveParaAtualizar = NULL;
+    
+    // Determina qual filho contém a chave
+    if (chave < no->chaveEsquerda) {
+        filho = no->esquerda;
+        irmaoDir = no->meio;
+        chaveParaAtualizar = &no->chaveEsquerda;
+    } else if (no->numChaves == 1 || chave < no->chaveDireita) {
+        filho = no->meio;
+        irmaoEsq = no->esquerda;
+        irmaoDir = no->numChaves == 2 ? no->direita : NULL;
+        chaveParaAtualizar = &no->chaveEsquerda;
+    } else {
+        filho = no->direita;
+        irmaoEsq = no->meio;
+        chaveParaAtualizar = &no->chaveDireita;
+    }
+
+    // Se a chave está no nó atual
+    if (chave == no->chaveEsquerda || chave == no->chaveDireita) {
+        int novaChave;
+        if (filho->numChaves == 2 || irmaoEsq == NULL || irmaoEsq->numChaves == 2) {
+            novaChave = encontrarMaiorChave(filho);
+            *chaveParaAtualizar = novaChave;
+            chave = novaChave;
+        } else {
+            novaChave = encontrarMenorChave(irmaoDir);
+            *chaveParaAtualizar = novaChave;
+            filho = irmaoDir;
+            chave = novaChave;
+        }
+    }
+
+    bool precisaAjusteFilho = false;
+    filho = removerRecursivo(filho, chave, &precisaAjusteFilho);
+
+    if (!precisaAjusteFilho) {
+        if (filho == no->esquerda) no->esquerda = filho;
+        else if (filho == no->meio) no->meio = filho;
+        else no->direita = filho;
+        *precisaAjuste = false;
+        return no;
+    }
+
+    // Tenta emprestar do irmão esquerdo
+    if (irmaoEsq && irmaoEsq->numChaves == 2) {
+        if (emprestarDoIrmaoEsquerdo(filho, irmaoEsq, no)) {
+            *precisaAjuste = false;
+            return no;
+        }
+    }
+    
+    // Tenta emprestar do irmão direito
+    if (irmaoDir && irmaoDir->numChaves == 2) {
+        if (emprestarDoIrmaoDireito(filho, irmaoDir, no)) {
+            *precisaAjuste = false;
+            return no;
+        }
+    }
+
+    // Se não conseguiu emprestar, funde os nós
+    if (irmaoEsq) {
+        no->esquerda = fundirNos(irmaoEsq, filho, no->chaveEsquerda);
+        no->meio = irmaoDir;
+        no->chaveEsquerda = no->chaveDireita;
+        no->chaveDireita = -1;
+        no->numChaves--;
+    } else {
+        no->esquerda = fundirNos(filho, irmaoDir, no->chaveEsquerda);
+        no->meio = NULL;
+        no->chaveDireita = -1;
+        no->numChaves--;
+    }
+
+    *precisaAjuste = (no->numChaves == 0);
+    return no;
+}
+
+Node* remover(Node* raiz, int chave) {
+    if (raiz == NULL) return NULL;
+    
+    bool precisaAjuste = false;
+    
+    // Caso especial: removendo a chave da raiz
+    if (raiz->chaveEsquerda == chave || (raiz->numChaves == 2 && raiz->chaveDireita == chave)) {
+        if (raiz->ehFolha) {
+            // Se for folha, remove normalmente
+            if (raiz->numChaves == 2 && chave == raiz->chaveDireita) {
+                raiz->chaveDireita = -1;
+                raiz->numChaves = 1;
+                return raiz;
+            } else if (raiz->numChaves == 1) {
+                free(raiz);
+                return NULL;
+            }
+        } else {
+            // Se não for folha
+            if (raiz->numChaves == 1) {
+                // Se tem só uma chave, pega o maior da esquerda
+                Node* esquerda = raiz->esquerda;
+                int maiorEsquerda;
+                
+                // Se o nó esquerdo tem duas chaves, use a direita
+                if (esquerda->numChaves == 2) {
+                    maiorEsquerda = esquerda->chaveDireita;
+                    esquerda->chaveDireita = -1;
+                    esquerda->numChaves = 1;
+                    raiz->chaveEsquerda = maiorEsquerda;
+                    return raiz;
+                } else {
+                    // Se tem só uma chave, precisamos reorganizar
+                    maiorEsquerda = esquerda->chaveEsquerda;
+                    raiz->chaveEsquerda = maiorEsquerda;
+                    chave = maiorEsquerda;  // Vamos remover este valor
+                }
+            } else {
+                // Se tem duas chaves, pega o maior da subárvore apropriada
+                if (chave == raiz->chaveEsquerda) {
+                    int maiorEsquerda = encontrarMaiorChave(raiz->esquerda);
+                    raiz->chaveEsquerda = maiorEsquerda;
+                    chave = maiorEsquerda;
+                } else {
+                    int maiorMeio = encontrarMaiorChave(raiz->meio);
+                    raiz->chaveDireita = maiorMeio;
+                    chave = maiorMeio;
+                }
+            }
+        }
+    }
+    
+    raiz = removerRecursivo(raiz, chave, &precisaAjuste);
+    
+    // Se a raiz ficou vazia após a remoção
+    if (raiz != NULL && raiz->numChaves == 0) {
+        Node* novaRaiz;
+        if (raiz->ehFolha) {
+            novaRaiz = NULL;
+        } else {
+            // Se não é folha, a nova raiz deve ser o filho da esquerda
+            novaRaiz = raiz->esquerda;
+            if (novaRaiz == NULL) {
+                novaRaiz = raiz->meio;
+            }
+        }
+        free(raiz);
+        return novaRaiz;
+    }
+    
+    return raiz;
+}
 // Função para percorrer a árvore em ordem (In-Order)
 void percorrerEmOrdem(Node* raiz) {
     if (raiz == NULL) return;
@@ -423,7 +698,7 @@ void imprimirArvore(Node *raiz) {
     free(tela);
 }
 
-// Função para exibir o menu
+/// Função para exibir o menu
 void exibirMenu() {
     printf("\n--- Menu ---\n");
     printf("1. Inserir número\n");
@@ -431,7 +706,8 @@ void exibirMenu() {
     printf("3. Ver árvore por nível\n");
     printf("4. Buscar número\n");
     printf("5. Ver árvore visualmente\n");
-    printf("6. Sair\n");
+    printf("6. Remover número\n");  
+    printf("7. Sair\n");           
     printf("Escolha uma opção: ");
 }
 
@@ -477,7 +753,20 @@ int main() {
                 imprimirArvore(raiz);
                 break;
 
-            case 6:
+            case 6:  
+                printf("Digite o número a ser removido: ");
+                scanf("%d", &valor);
+                if (buscar(raiz, valor)) {
+                    raiz = remover(raiz, valor);
+                    printf("Número %d removido da árvore.\n", valor);
+                    printf("Árvore após remoção:\n");
+                    imprimirArvore(raiz);
+                } else {
+                    printf("Número %d não encontrado na árvore.\n", valor);
+                }
+                break;
+
+            case 7:  
                 printf("Saindo...\n");
                 exit(0);
 
