@@ -1,5 +1,5 @@
 
-public class atividade1 {
+public class atividade {
 
     public static void main(String[] args) {
         int a= 25000;
